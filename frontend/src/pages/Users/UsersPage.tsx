@@ -68,6 +68,22 @@ export default function UsersPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
+      <style>{`
+        .users-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+        .users-cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+        .graduates-cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+        @media (max-width: 900px) {
+          .users-stats-grid { grid-template-columns: repeat(2,1fr); }
+          .users-cards-grid { grid-template-columns: repeat(2,1fr); }
+          .graduates-cards-grid { grid-template-columns: repeat(2,1fr); }
+        }
+        @media (max-width: 560px) {
+          .users-stats-grid { grid-template-columns: repeat(2,1fr); }
+          .users-cards-grid { grid-template-columns: 1fr; }
+          .graduates-cards-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
         <div>
@@ -135,7 +151,7 @@ export default function UsersPage() {
               {/* Resumen */}
               {users.length > 0 && (
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm" style={{ padding: '28px 36px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+                  <div className="users-stats-grid">
                     {[
                       { label: 'Total de usuarios',  val: users.length,                                 color: '#0f172a', bg: '#f8fafc' },
                       { label: 'Administradores',    val: users.filter(u => u.role === 'admin').length,  color: '#6d28d9', bg: '#f5f3ff' },

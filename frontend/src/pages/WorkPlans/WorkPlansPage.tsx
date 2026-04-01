@@ -167,7 +167,12 @@ export default function WorkPlansPage() {
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '28px', alignItems: 'start' }}>
+        <>
+        <style>{`
+          .wp-main-grid { display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: start; }
+          @media (max-width: 768px) { .wp-main-grid { grid-template-columns: 1fr; } }
+        `}</style>
+        <div className="wp-main-grid">
 
           {/* Panel izquierdo: programas */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm" style={{ overflow: 'hidden' }}>
@@ -207,7 +212,7 @@ export default function WorkPlansPage() {
               <div style={{
                 background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
                 borderRadius: '20px', padding: '28px 36px',
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
               }}>
                 <div>
                   <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 6px' }}>
@@ -291,7 +296,7 @@ export default function WorkPlansPage() {
                       </div>
 
                       {plan.description && (
-                        <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.65, margin: '0 0 16px', paddingLeft: '54px' }}>
+                        <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.65, margin: '0 0 16px', paddingLeft: '0' }}>
                           {plan.description}
                         </p>
                       )}
@@ -344,6 +349,7 @@ export default function WorkPlansPage() {
             )}
           </div>
         </div>
+        </>
       )}
 
       {/* Modal */}

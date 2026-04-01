@@ -150,8 +150,13 @@ export default function NewsPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
+      <style>{`
+        .news-main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+        @media (max-width: 768px) { .news-main-grid { grid-template-columns: 1fr; } }
+      `}</style>
+
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Noticias</h1>
           <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>Publica y administra las noticias del portal de egresados</p>
@@ -162,7 +167,7 @@ export default function NewsPage() {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'start' }}>
+      <div className="news-main-grid">
 
         {/* Lista */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -191,7 +196,7 @@ export default function NewsPage() {
                 {item.summary && <p className="text-slate-500" style={{ fontSize: '13px', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.summary}</p>}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
                   <span className="text-slate-400" style={{ fontSize: '12px' }}>{new Date(item.created_at).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
-                  <div className="opacity-0 group-hover:opacity-100 transition-all flex gap-1">
+                  <div className="flex gap-1 flex-wrap">
                     <button onClick={e => { e.stopPropagation(); handleTogglePublish(item) }} style={{ padding: '5px 9px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: item.is_published ? '#f1f5f9' : '#ecfdf5', color: item.is_published ? '#64748b' : '#059669', fontSize: '11px', fontWeight: 700 }}>{item.is_published ? 'Ocultar' : 'Publicar'}</button>
                     <button onClick={e => { e.stopPropagation(); openEdit(item) }} className="text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg p-1.5" style={{ border: 'none', cursor: 'pointer', background: 'transparent' }}>
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>

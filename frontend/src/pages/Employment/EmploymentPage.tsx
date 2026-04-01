@@ -92,6 +92,15 @@ export default function EmploymentPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
+      <style>{`
+        .empl-stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 28px; padding-top: 24px; border-top: 1px solid #f1f5f9; }
+        .empl-form-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+        @media (max-width: 640px) {
+          .empl-stats-grid { grid-template-columns: 1fr; }
+          .empl-form-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
+
       {/* Header */}
       <div>
         <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Empleabilidad</h1>
@@ -189,7 +198,7 @@ export default function EmploymentPage() {
                 </div>
 
                 {records.length > 0 && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginTop: '28px', paddingTop: '24px', borderTop: '1px solid #f1f5f9' }}>
+                  <div className="empl-stats-grid">
                     {[
                       { label: 'Registros totales', val: records.length,               color: '#0f172a' },
                       { label: 'Empleado (actual)', val: currentEmployed ? 'Sí' : 'No', color: currentEmployed ? '#059669' : '#ef4444' },
@@ -227,7 +236,7 @@ export default function EmploymentPage() {
                         </label>
                       ))}
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '18px' }}>
+                    <div className="empl-form-grid">
                       {[
                         { name: 'company_name', label: 'Empresa', placeholder: 'Nombre de empresa' },
                         { name: 'company_sector', label: 'Rubro / Sector', placeholder: 'Ej: Tecnología' },
@@ -288,7 +297,7 @@ export default function EmploymentPage() {
                             <p className="text-slate-400" style={{ fontSize: '13px', marginTop: '5px' }}>{[r.company_sector, r.location_city, r.salary_range].filter(Boolean).join(' · ')}</p>
                           )}
                         </div>
-                        <div className="opacity-0 group-hover:opacity-100 transition-all flex gap-1">
+                        <div className="flex gap-1 flex-shrink-0">
                           <button onClick={() => openEdit(r)} className="text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl p-2.5">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                           </button>
