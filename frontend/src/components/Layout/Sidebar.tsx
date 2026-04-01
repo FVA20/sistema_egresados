@@ -1,3 +1,4 @@
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -42,13 +43,14 @@ const links = [
   },
 ]
 
-function NavItem({ link, isOpen }: { link: typeof links[0]; isOpen: boolean }) {
+function NavItem({ link, isOpen, isMobile = false, onClose }: { link: typeof links[0]; isOpen: boolean; isMobile?: boolean; onClose?: () => void }) {
   const [hovered, setHovered] = useState(false)
   return (
     <NavLink
       key={link.to}
       to={link.to}
-      title={!isOpen ? link.label : undefined}
+      title={!isOpen && !isMobile ? link.label : undefined}
+      onClick={() => isMobile && onClose?.()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={({ isActive }) => ({
@@ -87,7 +89,7 @@ function NavItem({ link, isOpen }: { link: typeof links[0]; isOpen: boolean }) {
           }}>
             {link.icon}
           </span>
-          {isOpen && (
+          {(isOpen || isMobile) && (
             <div>
               <p style={{ fontSize: '15px', fontWeight: 600, color: isActive ? 'white' : hovered ? '#e2e8f0' : '#cbd5e1', lineHeight: 1, transition: 'color 0.2s' }}>{link.label}</p>
               <p style={{ fontSize: '11px', marginTop: '4px', color: isActive ? 'rgba(255,255,255,0.6)' : '#475569', transition: 'color 0.2s' }}>{link.desc}</p>
@@ -99,15 +101,41 @@ function NavItem({ link, isOpen }: { link: typeof links[0]; isOpen: boolean }) {
   )
 }
 
-interface Props { isOpen: boolean; onToggle: () => void }
+interface Props { isOpen: boolean; onToggle: () => void; isMobile?: boolean }
 
-export default function Sidebar({ isOpen, onToggle }: Props) {
+export default function Sidebar({ isOpen, onToggle, isMobile = false }: Props) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const handleLogout = () => { logout(); navigate('/login') }
 
+  const sidebarStyle: React.CSSProperties = isMobile
+    ? {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: '100vh',
+        width: '288px',
+        background: '#0f172a',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 50,
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
+        overflow: 'hidden',
+      }
+    : {
+        width: isOpen ? '288px' : '80px',
+        minHeight: '100vh',
+        background: '#0f172a',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'width 0.3s cubic-bezier(0.4,0,0.2,1)',
+        flexShrink: 0,
+        overflow: 'hidden',
+      }
+
   return (
-    <aside style={{ width: isOpen ? '288px' : '80px', minHeight: '100vh', background: '#0f172a', display: 'flex', flexDirection: 'column', transition: 'width 0.3s cubic-bezier(0.4,0,0.2,1)', flexShrink: 0, overflow: 'hidden' }}>
+    <aside style={sidebarStyle}>
 
       {/* Logo + Hamburger */}
       <div className={`flex items-center h-16 border-b border-slate-800 px-4 ${isOpen ? 'justify-between' : 'justify-center'}`}>
@@ -158,13 +186,13 @@ export default function Sidebar({ isOpen, onToggle }: Props) {
           <p className="text-xs font-bold text-slate-600 uppercase tracking-widest px-3 pb-3">Navegación</p>
         )}
         {links.map(link => (
-          <NavItem key={link.to} link={link} isOpen={isOpen} />
+          <NavItem key={link.to} link={link} isOpen={isOpen} isMobile={isMobile} onClose={onToggle} />
         ))}
       </nav>
 
       {/* User footer */}
-      <div className={`p-2 border-t border-slate-800 ${!isOpen && 'flex flex-col items-center gap-1'}`}>
-        {isOpen ? (
+      <div className={`p-2 border-t border-slate-800 ${(!isOpen && !isMobile) && 'flex flex-col items-center gap-1'}`}>
+        {(isOpen || isMobile) ? (
           <div className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-800 transition-colors">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {user?.username?.[0]?.toUpperCase()}
