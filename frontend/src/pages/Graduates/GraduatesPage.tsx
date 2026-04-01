@@ -168,7 +168,7 @@ export default function GraduatesPage() {
                       </td>
                       <td style={{ padding: '20px 28px', fontSize: '14px', color: '#64748b' }}>{g.email}</td>
                       <td style={{ padding: '20px 28px' }}>
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
                           <button
                             onClick={() => { setSelected(g); setModalOpen(true) }}
                             className="inline-flex items-center bg-blue-600 text-white font-bold hover:bg-blue-700 rounded-lg transition-colors"

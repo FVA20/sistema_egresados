@@ -34,8 +34,7 @@ function StatCard({ label, value, sub, icon, gradient, textColor, isPercent = fa
   const animated = useCountUp(value)
   return (
     <div
-      className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300"
-      style={{ padding: '36px 40px' }}
+      className="dash-stat-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300"
     >
       <div className="flex items-center" style={{ gap: '18px', marginBottom: '24px' }}>
         <div
@@ -49,7 +48,7 @@ function StatCard({ label, value, sub, icon, gradient, textColor, isPercent = fa
           <p className="text-slate-400" style={{ fontSize: '13px', marginTop: '5px' }}>{sub}</p>
         </div>
       </div>
-      <p className={`font-black leading-none tabular-nums ${textColor}`} style={{ fontSize: '50px' }}>
+      <p className={`dash-stat-number font-black leading-none tabular-nums ${textColor}`}>
         {animated}{isPercent ? '%' : ''}
       </p>
     </div>
@@ -89,16 +88,31 @@ export default function DashboardPage() {
   const sectorTotal = stats.top_sectors.reduce((acc, s) => acc + s.total, 0)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '56px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
+      <style>{`
+        .dash-banner-inner { padding: 52px 72px; }
+        .dash-banner-title { font-size: 46px; }
+        .dash-stat-card { padding: 28px 32px; }
+        .dash-stat-number { font-size: 50px; }
+        .dash-inner-card { padding: 40px 44px; }
+        @media (max-width: 640px) {
+          .dash-banner-inner { padding: 28px 24px; }
+          .dash-banner-title { font-size: 28px; }
+          .dash-stat-card { padding: 20px 20px; }
+          .dash-stat-number { font-size: 36px; }
+          .dash-inner-card { padding: 20px 20px; }
+        }
+      `}</style>
 
       {/* ── Banner ── */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl overflow-hidden">
         <div
-          className="flex flex-col sm:flex-row sm:items-center justify-between"
-          style={{ padding: '52px 72px', gap: '32px' }}
+          className="dash-banner-inner flex flex-col sm:flex-row sm:items-center justify-between"
+          style={{ gap: '32px' }}
         >
-          <div style={{ paddingLeft: '16px' }}>
-            <h1 className="font-black tracking-tight" style={{ fontSize: '46px', lineHeight: 1.1 }}>
+          <div style={{ paddingLeft: '4px' }}>
+            <h1 className="dash-banner-title font-black tracking-tight" style={{ lineHeight: 1.1 }}>
               Panel de Control
             </h1>
             <p className="text-blue-200 capitalize" style={{ fontSize: '17px', marginTop: '14px' }}>
@@ -167,7 +181,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-5" style={{ gap: '24px' }}>
 
         {/* Indicadores */}
-        <div className="xl:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm" style={{ padding: '40px 44px' }}>
+        <div className="dash-inner-card xl:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm">
           <h2 className="font-bold text-slate-900" style={{ fontSize: '18px', marginBottom: '6px' }}>
             Indicadores de Empleabilidad
           </h2>
@@ -196,7 +210,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Gráfica de barras */}
-        <div className="xl:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm" style={{ padding: '40px 44px' }}>
+        <div className="dash-inner-card xl:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
             <div>
               <h2 className="font-bold text-slate-900" style={{ fontSize: '18px', marginBottom: '6px' }}>
@@ -251,7 +265,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-5" style={{ gap: '24px' }}>
 
         {/* Pie chart */}
-        <div className="xl:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm" style={{ padding: '40px 44px' }}>
+        <div className="dash-inner-card xl:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
             <h2 className="font-bold text-slate-900" style={{ fontSize: '18px' }}>Sectores Laborales</h2>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 600, color: '#10b981', background: '#ecfdf5', padding: '4px 10px', borderRadius: '99px' }}>
@@ -310,7 +324,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Accesos rápidos */}
-        <div className="xl:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm" style={{ padding: '40px 44px' }}>
+        <div className="dash-inner-card xl:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm">
           <h2 className="font-bold text-slate-900" style={{ fontSize: '18px', marginBottom: '6px' }}>
             Accesos Rápidos
           </h2>
