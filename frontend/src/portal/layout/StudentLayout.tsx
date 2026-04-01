@@ -11,6 +11,7 @@ export default function StudentLayout() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const [programName, setProgramName] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   if (!isAuthenticated) return <Navigate to="/portal/login" replace />
@@ -28,7 +29,6 @@ export default function StudentLayout() {
 
   const initials = `${graduate?.first_name?.[0] ?? ''}${graduate?.last_name?.[0] ?? ''}`.toUpperCase()
 
-  // Cierra el dropdown al hacer clic fuera
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -39,9 +39,12 @@ export default function StudentLayout() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  // Carga el nombre del programa al abrir el perfil
+  // Cierra el menú móvil al cambiar de ruta
+  useEffect(() => { setMobileMenuOpen(false) }, [location.pathname])
+
   const openProfile = async () => {
     setDropdownOpen(false)
+    setMobileMenuOpen(false)
     setShowProfile(true)
     if (!programName && graduate?.program_id) {
       try {
@@ -54,6 +57,20 @@ export default function StudentLayout() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f9ff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+
+      <style>{`
+        .student-nav-links { display: flex; align-items: center; gap: 4px; }
+        .student-hamburger { display: none; }
+        .student-user-name { display: block; }
+        .student-mobile-menu { display: none; }
+        @media (max-width: 768px) {
+          .student-nav-links { display: none; }
+          .student-hamburger { display: flex; }
+          .student-user-name { display: none; }
+          .student-mobile-menu { display: block; }
+        }
+      `}</style>
+
       {/* Navbar */}
       <nav style={{
         background: 'linear-gradient(135deg, #00aae4 0%, #006fa0 100%)',
@@ -62,21 +79,21 @@ export default function StudentLayout() {
         top: 0,
         zIndex: 50,
       }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
 
           {/* Logo */}
-          <Link to="/portal/inicio" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            <div style={{ width: '42px', height: '42px', background: 'rgba(255,255,255,0.18)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', border: '1px solid rgba(255,255,255,0.15)' }}>
+          <Link to="/portal/inicio" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+            <div style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.18)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', border: '1px solid rgba(255,255,255,0.15)', flexShrink: 0 }}>
               🎓
             </div>
             <div>
-              <p style={{ color: 'white', fontWeight: 800, fontSize: '15px', margin: 0, letterSpacing: '-0.01em' }}>Portal Egresados</p>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', margin: 0 }}>IESTP Enrique López Albújar</p>
+              <p style={{ color: 'white', fontWeight: 800, fontSize: '14px', margin: 0, letterSpacing: '-0.01em' }}>Portal Egresados</p>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px', margin: 0 }}>IESTP Enrique López Albújar</p>
             </div>
           </Link>
 
-          {/* Nav Links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          {/* Nav Links — desktop */}
+          <div className="student-nav-links">
             {navLinks.map(link => {
               const active = location.pathname === link.to || (link.to !== '/portal/inicio' && location.pathname.startsWith(link.to))
               return (
@@ -87,15 +104,13 @@ export default function StudentLayout() {
                     color: active ? 'white' : 'rgba(255,255,255,0.7)',
                     fontWeight: active ? 700 : 500,
                     fontSize: '14px',
-                    padding: '8px 18px',
+                    padding: '8px 16px',
                     borderRadius: '10px',
                     background: active ? 'rgba(255,255,255,0.18)' : 'transparent',
                     border: active ? '1px solid rgba(255,255,255,0.2)' : '1px solid transparent',
                     textDecoration: 'none',
                     transition: 'all 0.15s',
                   }}
-                  onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)' }}
-                  onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
                 >
                   {link.label}
                 </Link>
@@ -103,35 +118,33 @@ export default function StudentLayout() {
             })}
           </div>
 
-          {/* User + Dropdown */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Derecha: Avatar (desktop) + Hamburguesa (mobile) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 
-            {/* Avatar con dropdown */}
+            {/* Avatar con dropdown — desktop */}
             <div ref={dropdownRef} style={{ position: 'relative' }}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
+                  gap: '10px',
                   background: dropdownOpen ? 'rgba(255,255,255,0.2)' : 'transparent',
                   border: '1px solid transparent',
                   borderRadius: '12px',
-                  padding: '6px 12px 6px 6px',
+                  padding: '6px 10px 6px 6px',
                   cursor: 'pointer',
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => { if (!dropdownOpen) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.12)' }}
-                onMouseLeave={e => { if (!dropdownOpen) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
               >
-                <div style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '13px', color: 'white', flexShrink: 0 }}>
+                <div style={{ width: '34px', height: '34px', background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '12px', color: 'white', flexShrink: 0 }}>
                   {initials}
                 </div>
-                <div style={{ textAlign: 'left' }}>
+                <div className="student-user-name" style={{ textAlign: 'left' }}>
                   <p style={{ color: 'white', fontWeight: 700, fontSize: '13px', margin: 0, lineHeight: 1.2 }}>{graduate?.first_name} {graduate?.last_name}</p>
                   <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', margin: 0 }}>Egresado</p>
                 </div>
-                <svg style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)', marginLeft: '4px', transition: 'transform 0.2s', transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)', transition: 'transform 0.2s', transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
@@ -150,18 +163,14 @@ export default function StudentLayout() {
                   overflow: 'hidden',
                   zIndex: 100,
                 }}>
-                  {/* Cabecera del dropdown */}
                   <div style={{ padding: '16px 20px', background: '#f0f9ff', borderBottom: '1px solid #e2e8f0' }}>
                     <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>{graduate?.first_name} {graduate?.last_name}</p>
                     <p style={{ fontSize: '12px', color: '#94a3b8', margin: '2px 0 0' }}>{graduate?.email}</p>
                   </div>
-                  {/* Opciones */}
                   <div style={{ padding: '8px' }}>
                     <button
                       onClick={openProfile}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#334155', transition: 'background 0.15s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#f0f9ff' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#334155' }}
                     >
                       <svg style={{ width: '16px', height: '16px', color: '#00aae4', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -171,9 +180,7 @@ export default function StudentLayout() {
                     <div style={{ height: '1px', background: '#f1f5f9', margin: '4px 0' }} />
                     <button
                       onClick={handleLogout}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#dc2626', transition: 'background 0.15s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fef2f2' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#dc2626' }}
                     >
                       <svg style={{ width: '16px', height: '16px', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -185,12 +192,86 @@ export default function StudentLayout() {
               )}
             </div>
 
+            {/* Hamburguesa — mobile */}
+            <button
+              className="student-hamburger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '10px', padding: '8px', cursor: 'pointer', color: 'white', alignItems: 'center', justifyContent: 'center' }}
+            >
+              {mobileMenuOpen ? (
+                <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              ) : (
+                <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Menú móvil desplegable */}
+        {mobileMenuOpen && (
+          <div className="student-mobile-menu" style={{ borderTop: '1px solid rgba(255,255,255,0.15)', background: 'rgba(0,111,160,0.97)', padding: '12px 16px 16px' }}>
+            {/* Info del usuario */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '14px', marginBottom: '10px' }}>
+              <div style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '14px', color: 'white', flexShrink: 0 }}>
+                {initials}
+              </div>
+              <div>
+                <p style={{ color: 'white', fontWeight: 700, fontSize: '14px', margin: 0 }}>{graduate?.first_name} {graduate?.last_name}</p>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', margin: 0 }}>{graduate?.email}</p>
+              </div>
+            </div>
+
+            {/* Links de navegación */}
+            {navLinks.map(link => {
+              const active = location.pathname === link.to || (link.to !== '/portal/inicio' && location.pathname.startsWith(link.to))
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  style={{
+                    display: 'block',
+                    color: active ? 'white' : 'rgba(255,255,255,0.8)',
+                    fontWeight: active ? 700 : 500,
+                    fontSize: '15px',
+                    padding: '13px 16px',
+                    borderRadius: '12px',
+                    background: active ? 'rgba(255,255,255,0.18)' : 'transparent',
+                    textDecoration: 'none',
+                    marginBottom: '4px',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', margin: '8px 0' }} />
+
+            {/* Mi Perfil */}
+            <button
+              onClick={openProfile}
+              style={{ width: '100%', textAlign: 'left', display: 'block', color: 'rgba(255,255,255,0.8)', fontWeight: 500, fontSize: '15px', padding: '13px 16px', borderRadius: '12px', background: 'transparent', border: 'none', cursor: 'pointer', marginBottom: '4px' }}
+            >
+              Mi Perfil
+            </button>
+
+            {/* Cerrar sesión */}
+            <button
+              onClick={handleLogout}
+              style={{ width: '100%', textAlign: 'left', display: 'block', color: '#fca5a5', fontWeight: 600, fontSize: '15px', padding: '13px 16px', borderRadius: '12px', background: 'rgba(220,38,38,0.15)', border: 'none', cursor: 'pointer' }}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* Content */}
-      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 32px' }}>
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 16px' }}>
         <Outlet />
       </main>
 
@@ -199,7 +280,6 @@ export default function StudentLayout() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '16px' }}>
           <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '440px', overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.2)' }}>
 
-            {/* Header */}
             <div style={{ background: 'linear-gradient(135deg, #00aae4, #006fa0)', padding: '36px 36px 32px', position: 'relative' }}>
               <button
                 onClick={() => setShowProfile(false)}
@@ -216,7 +296,6 @@ export default function StudentLayout() {
               <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', margin: 0 }}>Egresado — IESTP Enrique López Albújar</p>
             </div>
 
-            {/* Datos */}
             <div style={{ padding: '28px 36px 32px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {[
                 {

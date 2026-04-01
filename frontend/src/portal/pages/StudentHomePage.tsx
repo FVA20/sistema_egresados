@@ -74,11 +74,27 @@ export default function StudentHomePage() {
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
 
+      <style>{`
+        .home-hero { padding: 56px 64px; }
+        .home-hero-title { font-size: 50px; }
+        .home-benefits { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+        .home-news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        @media (max-width: 1024px) {
+          .home-benefits { grid-template-columns: repeat(2, 1fr); }
+          .home-news-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+          .home-hero { padding: 28px 20px; }
+          .home-hero-title { font-size: 30px; }
+          .home-benefits { grid-template-columns: repeat(1, 1fr); gap: 12px; }
+          .home-news-grid { grid-template-columns: repeat(1, 1fr); gap: 16px; }
+        }
+      `}</style>
+
       {/* Hero */}
-      <div style={{
+      <div className="home-hero" style={{
         background: 'linear-gradient(135deg, #00aae4 0%, #006fa0 100%)',
         borderRadius: '24px',
-        padding: '56px 64px',
         marginBottom: '48px',
         position: 'relative',
         overflow: 'hidden',
@@ -95,7 +111,7 @@ export default function StudentHomePage() {
               <span style={{ fontSize: '14px' }}>🎓</span>
               <span style={{ color: 'white', fontSize: '13px', fontWeight: 600 }}>IESTP Enrique López Albújar</span>
             </div>
-            <h1 style={{ fontSize: '50px', fontWeight: 900, color: 'white', margin: '0 0 16px', lineHeight: 1.1 }}>
+            <h1 className="home-hero-title" style={{ fontWeight: 900, color: 'white', margin: '0 0 16px', lineHeight: 1.1 }}>
               Bienvenido,<br />{graduate?.first_name}
             </h1>
             <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.7)', maxWidth: '480px', lineHeight: 1.7, margin: '0 0 40px' }}>
@@ -135,7 +151,7 @@ export default function StudentHomePage() {
       </div>
 
       {/* Benefits grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '18px' }}>
+      <div className="home-benefits">
         {benefits.map((benefit, i) => (
           <div
             key={i}
@@ -266,7 +282,7 @@ export default function StudentHomePage() {
 
         {newsItems.length === 0 ? (
           /* Estado vacío */
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          <div className="home-news-grid">
             {[1, 2, 3].map(n => (
               <div key={n} style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ height: '160px', background: 'linear-gradient(135deg, #f0fbff 0%, #cffafe 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -286,7 +302,7 @@ export default function StudentHomePage() {
           </div>
         ) : (
           /* Noticias reales */
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          <div className="home-news-grid">
             {newsItems.slice(0, 6).map(item => {
               const c = CATEGORY_COLORS[item.category || 'Noticia'] || CATEGORY_COLORS['Noticia']
               return (

@@ -42,7 +42,7 @@ export default function StudentLoginPage() {
       </div>
 
       {/* Panel derecho */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-16 py-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 sm:px-12 lg:px-16 py-12">
         <div className="w-full max-w-md">
 
           {/* Logo móvil */}
