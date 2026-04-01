@@ -1,4 +1,5 @@
 from pathlib import Path
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -6,18 +7,31 @@ from app.core.config import settings
 from app.api.v1 import auth, graduates, employment, programs, reports, users, workplans, news, contact, surveys
 from app.models import news as _news_model  # noqa: F401 — registra la tabla en Base
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from app.initial_data import init_db
+    init_db()
+    yield
+
+
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     docs_url="/docs",
     redoc_url="/redoc",
     redirect_slashes=False,
+    lifespan=lifespan,
 )
 
-# CORS — permite que React (localhost:5173) consuma la API
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        settings.FRONTEND_URL,
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
