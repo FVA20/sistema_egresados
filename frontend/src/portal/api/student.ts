@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const studentApi = axios.create({ baseURL: '/api/v1' })
+const studentApi = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : '/api/v1',
+})
 
 studentApi.interceptors.request.use(config => {
   const token = localStorage.getItem('graduate_token')
