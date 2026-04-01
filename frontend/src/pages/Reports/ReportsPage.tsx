@@ -278,7 +278,7 @@ export default function ReportsPage() {
                 Envía la encuesta de seguimiento laboral directamente por Gmail a los correos de los egresados.
               </p>
               <button
-                onClick={() => { setShowSurveyModal(true); setSurveyResults(null); setSurveyError('') }}
+                onClick={() => { setShowSurveyModal(true); setSurveyError('') }}
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#3b82f6', color: 'white', fontWeight: 700, fontSize: '13px', border: 'none', borderRadius: '10px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(59,130,246,0.3)' }}
               >
                 <svg style={{ width: '14px', height: '14px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
