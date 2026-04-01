@@ -42,7 +42,7 @@ export default function LoginPage() {
       </div>
 
       {/* ── Panel derecho ── */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-16 py-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 sm:px-12 lg:px-16 py-12">
         <div className="w-full max-w-md">
 
           {/* Logo móvil */}
@@ -58,14 +58,14 @@ export default function LoginPage() {
           <div className="px-0 py-0">
 
             {/* Encabezado */}
-            <div className="mb-16">
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-8">
+            <div className="mb-8 sm:mb-16">
+              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 sm:mb-8">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#0f172a', marginBottom: '12px', lineHeight: 1.1 }}>Iniciar sesión</h2>
-              <p style={{ fontSize: '17px', color: '#94a3b8', lineHeight: 1.6 }}>Ingresa tus credenciales para acceder al sistema</p>
+              <h2 style={{ fontSize: 'clamp(28px, 6vw, 38px)', fontWeight: 900, color: '#0f172a', marginBottom: '12px', lineHeight: 1.1 }}>Iniciar sesión</h2>
+              <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6 }}>Ingresa tus credenciales para acceder al sistema</p>
             </div>
 
             {/* Campos */}
@@ -146,7 +146,7 @@ export default function LoginPage() {
             </form>
           </div>
 
-          <p className="text-center text-slate-400 text-xs mt-28">
+          <p className="text-center text-slate-400 text-xs mt-10 sm:mt-28">
             © {new Date().getFullYear()} IESTP Enrique López Albújar
           </p>
         </div>
