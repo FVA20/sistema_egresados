@@ -102,7 +102,7 @@ export default function EmploymentPage() {
       `}</style>
 
       {/* Header */}
-      <div>
+      <div style={{ paddingLeft: '20px' }}>
         <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Empleabilidad</h1>
         <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>Historial y registros laborales de los egresados</p>
       </div>

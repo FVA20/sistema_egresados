@@ -86,7 +86,7 @@ export default function UsersPage() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
-        <div>
+        <div style={{ paddingLeft: '20px' }}>
           <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Usuarios</h1>
           <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>Gestión de accesos al sistema</p>
         </div>

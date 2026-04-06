@@ -44,7 +44,7 @@ export default function ProgramsPage() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
-        <div>
+        <div style={{ paddingLeft: '20px' }}>
           <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Programas de Estudio</h1>
           <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>
             {loading ? 'Cargando...' : `${programs.length} programa${programs.length !== 1 ? 's' : ''} registrado${programs.length !== 1 ? 's' : ''}`}

@@ -157,7 +157,7 @@ export default function NewsPage() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
+        <div style={{ paddingLeft: '20px' }}>
           <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Noticias</h1>
           <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>Publica y administra las noticias del portal de egresados</p>
         </div>

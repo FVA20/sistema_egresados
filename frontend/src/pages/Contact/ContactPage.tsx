@@ -74,7 +74,7 @@ export default function ContactPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
       {/* Header */}
-      <div>
+      <div style={{ paddingLeft: '20px' }}>
         <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Información de Contacto</h1>
         <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>
           Edita los datos que se muestran en la sección "Contáctanos" del portal

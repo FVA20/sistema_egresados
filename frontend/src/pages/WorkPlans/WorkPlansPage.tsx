@@ -155,7 +155,7 @@ export default function WorkPlansPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
       {/* Header */}
-      <div>
+      <div style={{ paddingLeft: '20px' }}>
         <h1 className="font-black text-slate-900" style={{ fontSize: '36px', lineHeight: 1.1 }}>Planes de Trabajo</h1>
         <p className="text-slate-500" style={{ fontSize: '15px', marginTop: '8px' }}>
           Gestiona los planes de trabajo por programa de estudio
