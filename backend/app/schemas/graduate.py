@@ -38,6 +38,7 @@ class GraduateResponse(GraduateBase):
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+    last_seen: Optional[datetime] = None
 
     class Config:
         from_attributes = True

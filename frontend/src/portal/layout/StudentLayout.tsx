@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { Navigate, Outlet, useNavigate, useLocation, Link } from 'react-router-dom'
 import { useStudentAuth } from '../context/StudentAuthContext'
 import { getPrograms } from '../api/student'
+import axios from 'axios'
+
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : '/api/v1'
 
 export default function StudentLayout() {
   const { isAuthenticated, graduate, logout } = useStudentAuth()
@@ -13,6 +16,16 @@ export default function StudentLayout() {
   const [programName, setProgramName] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const token = localStorage.getItem('graduate_token')
+
+  useEffect(() => {
+    if (!token) return
+    const ping = () => axios.post(`${API_BASE}/portal/ping`, {}, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
+    ping()
+    const interval = setInterval(ping, 30000)
+    return () => clearInterval(interval)
+  }, [token])
 
   if (!isAuthenticated) return <Navigate to="/portal/login" replace />
 

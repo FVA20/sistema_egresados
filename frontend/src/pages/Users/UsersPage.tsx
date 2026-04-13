@@ -22,6 +22,13 @@ export default function UsersPage() {
   const [saving, setSaving]         = useState(false)
   const [showPass, setShowPass]     = useState(false)
   const [search, setSearch]         = useState('')
+  const [onlineIds, setOnlineIds]   = useState<Set<number>>(new Set())
+
+  const loadOnline = () => {
+    api.get('/portal/active-graduates').then(r => {
+      setOnlineIds(new Set(r.data.filter((x: any) => x.online).map((x: any) => x.id)))
+    }).catch(() => {})
+  }
 
   const load = () => {
     setLoading(true)
@@ -31,7 +38,13 @@ export default function UsersPage() {
       api.get('/programs/').then(r => setPrograms(r.data)),
     ]).finally(() => setLoading(false))
   }
-  useEffect(() => { load() }, [])
+
+  useEffect(() => {
+    load()
+    loadOnline()
+    const interval = setInterval(loadOnline, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   const openModal = () => { setForm({ username: '', email: '', password: '', role: 'viewer' }); setError(''); setShowPass(false); setShowModal(true) }
 
@@ -319,9 +332,20 @@ export default function UsersPage() {
                           </p>
                         </div>
 
-                        {/* Badge activo */}
-                        <span style={{ fontSize: '12px', fontWeight: 700, padding: '5px 14px', borderRadius: '99px', border: '1px solid #a7f3d0', background: '#ecfdf5', color: '#059669', width: 'fit-content' }}>
-                          Portal activo
+                        {/* Badge en línea / desconectado */}
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center', gap: '6px',
+                          fontSize: '12px', fontWeight: 700, padding: '5px 14px', borderRadius: '99px', width: 'fit-content',
+                          border: onlineIds.has(g.id) ? '1px solid #a7f3d0' : '1px solid #e2e8f0',
+                          background: onlineIds.has(g.id) ? '#ecfdf5' : '#f8fafc',
+                          color: onlineIds.has(g.id) ? '#059669' : '#94a3b8',
+                        }}>
+                          <span style={{
+                            width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0,
+                            background: onlineIds.has(g.id) ? '#22c55e' : '#cbd5e1',
+                            boxShadow: onlineIds.has(g.id) ? '0 0 0 2px #bbf7d0' : 'none',
+                          }} />
+                          {onlineIds.has(g.id) ? 'En línea' : 'Desconectado'}
                         </span>
 
                         {/* Botón eliminar */}

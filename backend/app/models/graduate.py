@@ -20,6 +20,7 @@ class Graduate(Base):
     linkedin_url = Column(String(300), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    last_seen  = Column(DateTime(timezone=True), nullable=True)
 
     program = relationship("Program", back_populates="graduates")
     employment_records = relationship("EmploymentRecord", back_populates="graduate", cascade="all, delete-orphan")
