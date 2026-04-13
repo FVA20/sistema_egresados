@@ -42,7 +42,18 @@ export default function UsersPage() {
     const interval = setInterval(() => {
       getGraduates({ limit: 200 }).then(data => setGraduates(data)).catch(() => {})
     }, 5000)
-    return () => clearInterval(interval)
+    // Escucha desconexiones instantáneas del portal
+    let channel: BroadcastChannel | null = null
+    try {
+      channel = new BroadcastChannel('graduate_presence')
+      channel.onmessage = () => {
+        getGraduates({ limit: 200 }).then(data => setGraduates(data)).catch(() => {})
+      }
+    } catch {}
+    return () => {
+      clearInterval(interval)
+      channel?.close()
+    }
   }, [])
 
   const openModal = () => { setForm({ username: '', email: '', password: '', role: 'viewer' }); setError(''); setShowPass(false); setShowModal(true) }

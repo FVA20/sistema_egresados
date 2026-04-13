@@ -33,7 +33,14 @@ export default function StudentLayout() {
     const ping = () => axios.post(`${API_BASE}/auth/graduate-ping`, {}, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
     ping()
     const interval = setInterval(ping, 30000)
-    const handleUnload = () => sendLogout(token)
+    const handleUnload = () => {
+      sendLogout(token)
+      try {
+        const ch = new BroadcastChannel('graduate_presence')
+        ch.postMessage({ type: 'logout' })
+        ch.close()
+      } catch {}
+    }
     window.addEventListener('beforeunload', handleUnload)
     return () => {
       clearInterval(interval)
@@ -45,6 +52,12 @@ export default function StudentLayout() {
 
   const handleLogout = () => {
     if (token) sendLogout(token)
+    // Avisa al admin instantáneamente via BroadcastChannel
+    try {
+      const ch = new BroadcastChannel('graduate_presence')
+      ch.postMessage({ type: 'logout' })
+      ch.close()
+    } catch {}
     logout()
     navigate('/portal/login')
   }
