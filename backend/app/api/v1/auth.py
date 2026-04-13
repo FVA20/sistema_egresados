@@ -2,12 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from datetime import datetime, timezone
 from app.core.database import get_db
-from app.core.security import verify_password, create_access_token, hash_password
+from app.core.security import verify_password, create_access_token, hash_password, decode_token
 from app.models.user import User
 from app.models.graduate import Graduate
 from app.schemas.user import LoginRequest, TokenResponse, UserResponse
-from app.api.v1.deps import get_current_user
+from app.api.v1.deps import get_current_user, oauth2_scheme
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
@@ -81,6 +82,26 @@ def update_me(
     db.commit()
     db.refresh(current_user)
     return current_user
+
+
+@router.post("/graduate-ping")
+def graduate_ping(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+):
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido")
+    sub: str = payload.get("sub", "")
+    if not sub.startswith("graduate_"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo egresados")
+    graduate_id = int(sub.split("_", 1)[1])
+    graduate = db.query(Graduate).filter(Graduate.id == graduate_id).first()
+    if not graduate:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No encontrado")
+    graduate.last_seen = datetime.now(timezone.utc)
+    db.commit()
+    return {"ok": True}
 
 
 @router.post("/graduate-login", response_model=GraduateTokenResponse)

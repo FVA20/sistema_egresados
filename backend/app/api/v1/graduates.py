@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
+from datetime import datetime, timezone, timedelta
 from app.core.database import get_db
 from app.models.graduate import Graduate
 from app.schemas.graduate import GraduateCreate, GraduateUpdate, GraduateResponse
@@ -79,6 +80,20 @@ def update_graduate(
     db.commit()
     db.refresh(graduate)
     return graduate
+
+
+@router.get("/active-status")
+def active_status(
+    db: Session = Depends(get_db),
+    _=Depends(get_current_user),
+):
+    threshold = datetime.now(timezone.utc) - timedelta(minutes=3)
+    online_ids = {
+        row.id for row in
+        db.query(Graduate.id).filter(Graduate.last_seen >= threshold).all()
+    }
+    all_rows = db.query(Graduate.id).all()
+    return [{"id": row.id, "online": row.id in online_ids} for row in all_rows]
 
 
 @router.delete("/{graduate_id}", status_code=status.HTTP_204_NO_CONTENT)

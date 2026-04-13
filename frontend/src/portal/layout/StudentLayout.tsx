@@ -21,7 +21,7 @@ export default function StudentLayout() {
 
   useEffect(() => {
     if (!token) return
-    const ping = () => axios.post(`${API_BASE}/portal/ping`, {}, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
+    const ping = () => axios.post(`${API_BASE}/auth/graduate-ping`, {}, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
     ping()
     const interval = setInterval(ping, 30000)
     return () => clearInterval(interval)
