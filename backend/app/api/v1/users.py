@@ -1,13 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import datetime, timezone, timedelta
 from app.core.database import get_db
 from app.core.security import hash_password
 from app.models.user import User
+from app.models.graduate import Graduate
 from app.schemas.user import UserCreate, UserUpdate, UserResponse
 from app.api.v1.deps import require_admin
 
 router = APIRouter(prefix="/users", tags=["Usuarios Admin"])
+
+
+@router.get("/graduates-online")
+def graduates_online(db: Session = Depends(get_db), _=Depends(require_admin)):
+    threshold = datetime.now(timezone.utc) - timedelta(minutes=3)
+    online_ids = {
+        row.id for row in
+        db.query(Graduate.id).filter(Graduate.last_seen >= threshold).all()
+    }
+    all_rows = db.query(Graduate.id).all()
+    return [{"id": row.id, "online": row.id in online_ids} for row in all_rows]
 
 
 @router.get("/", response_model=List[UserResponse])

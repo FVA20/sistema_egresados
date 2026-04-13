@@ -25,7 +25,7 @@ export default function UsersPage() {
   const [onlineIds, setOnlineIds]   = useState<Set<number>>(new Set())
 
   const loadOnline = () => {
-    api.get('/graduates/active-status').then(r => {
+    api.get('/users/graduates-online').then(r => {
       setOnlineIds(new Set(r.data.filter((x: any) => x.online).map((x: any) => x.id)))
     }).catch(() => {})
   }
