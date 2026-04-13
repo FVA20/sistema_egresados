@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 from app.core.database import get_db
-from app.core.security import verify_password, create_access_token
+from app.core.security import verify_password, create_access_token, hash_password
 from app.models.user import User
 from app.models.graduate import Graduate
 from app.schemas.user import LoginRequest, TokenResponse, UserResponse
+from app.api.v1.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
@@ -39,6 +41,46 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         access_token=token,
         user=UserResponse.model_validate(user),
     )
+
+
+class UpdateProfileRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    current_password: Optional[str] = None
+    new_password: Optional[str] = None
+
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
+
+@router.put("/me", response_model=UserResponse)
+def update_me(
+    data: UpdateProfileRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if data.username and data.username != current_user.username:
+        if db.query(User).filter(User.username == data.username).first():
+            raise HTTPException(status_code=400, detail="Ese nombre de usuario ya está en uso")
+        current_user.username = data.username
+
+    if data.email and data.email != current_user.email:
+        if db.query(User).filter(User.email == data.email).first():
+            raise HTTPException(status_code=400, detail="Ese correo ya está en uso")
+        current_user.email = data.email
+
+    if data.new_password:
+        if not data.current_password:
+            raise HTTPException(status_code=400, detail="Ingresa tu contraseña actual")
+        if not verify_password(data.current_password, current_user.password_hash):
+            raise HTTPException(status_code=400, detail="Contraseña actual incorrecta")
+        current_user.password_hash = hash_password(data.new_password)
+
+    db.commit()
+    db.refresh(current_user)
+    return current_user
 
 
 @router.post("/graduate-login", response_model=GraduateTokenResponse)
