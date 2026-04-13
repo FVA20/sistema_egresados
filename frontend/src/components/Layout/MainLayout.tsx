@@ -36,19 +36,21 @@ export default function MainLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
         <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-20 shadow-sm">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            style={{
-              display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', justifyContent: 'center',
-              width: '42px', height: '42px', borderRadius: '12px', border: '1px solid #e2e8f0',
-              background: 'white', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
-            }}
-            title="Menú"
-          >
-            <span style={{ width: '16px', height: '2px', background: '#475569', borderRadius: '2px' }} />
-            <span style={{ width: '12px', height: '2px', background: '#475569', borderRadius: '2px' }} />
-            <span style={{ width: '16px', height: '2px', background: '#475569', borderRadius: '2px' }} />
-          </button>
+          {isMobile && (
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{
+                display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', justifyContent: 'center',
+                width: '42px', height: '42px', borderRadius: '12px', border: '1px solid #e2e8f0',
+                background: 'white', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
+              }}
+              title="Menú"
+            >
+              <span style={{ width: '16px', height: '2px', background: '#475569', borderRadius: '2px' }} />
+              <span style={{ width: '12px', height: '2px', background: '#475569', borderRadius: '2px' }} />
+              <span style={{ width: '16px', height: '2px', background: '#475569', borderRadius: '2px' }} />
+            </button>
+          )}
 
           {/* Right side */}
           <div className="flex items-center gap-3">
