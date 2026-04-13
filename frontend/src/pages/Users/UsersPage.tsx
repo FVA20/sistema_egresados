@@ -22,12 +22,10 @@ export default function UsersPage() {
   const [saving, setSaving]         = useState(false)
   const [showPass, setShowPass]     = useState(false)
   const [search, setSearch]         = useState('')
-  const [onlineIds, setOnlineIds]   = useState<Set<number>>(new Set())
 
-  const loadOnline = () => {
-    api.get('/users/graduates-online').then(r => {
-      setOnlineIds(new Set(r.data.filter((x: any) => x.online).map((x: any) => x.id)))
-    }).catch(() => {})
+  const isOnline = (last_seen?: string) => {
+    if (!last_seen) return false
+    return (Date.now() - new Date(last_seen).getTime()) < 3 * 60 * 1000
   }
 
   const load = () => {
@@ -41,8 +39,9 @@ export default function UsersPage() {
 
   useEffect(() => {
     load()
-    loadOnline()
-    const interval = setInterval(loadOnline, 30000)
+    const interval = setInterval(() => {
+      getGraduates({ limit: 200 }).then(data => setGraduates(data)).catch(() => {})
+    }, 30000)
     return () => clearInterval(interval)
   }, [])
 
@@ -336,16 +335,16 @@ export default function UsersPage() {
                         <span style={{
                           display: 'inline-flex', alignItems: 'center', gap: '6px',
                           fontSize: '12px', fontWeight: 700, padding: '5px 14px', borderRadius: '99px', width: 'fit-content',
-                          border: onlineIds.has(g.id) ? '1px solid #a7f3d0' : '1px solid #e2e8f0',
-                          background: onlineIds.has(g.id) ? '#ecfdf5' : '#f8fafc',
-                          color: onlineIds.has(g.id) ? '#059669' : '#94a3b8',
+                          border: isOnline(g.last_seen) ? '1px solid #a7f3d0' : '1px solid #e2e8f0',
+                          background: isOnline(g.last_seen) ? '#ecfdf5' : '#f8fafc',
+                          color: isOnline(g.last_seen) ? '#059669' : '#94a3b8',
                         }}>
                           <span style={{
                             width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0,
-                            background: onlineIds.has(g.id) ? '#22c55e' : '#cbd5e1',
-                            boxShadow: onlineIds.has(g.id) ? '0 0 0 2px #bbf7d0' : 'none',
+                            background: isOnline(g.last_seen) ? '#22c55e' : '#cbd5e1',
+                            boxShadow: isOnline(g.last_seen) ? '0 0 0 2px #bbf7d0' : 'none',
                           }} />
-                          {onlineIds.has(g.id) ? 'En línea' : 'Desconectado'}
+                          {isOnline(g.last_seen) ? 'En línea' : 'Desconectado'}
                         </span>
 
                         {/* Botón eliminar */}

@@ -31,6 +31,7 @@ export interface Graduate {
   linkedin_url?: string
   created_at: string
   updated_at?: string
+  last_seen?: string
 }
 
 export interface EmploymentRecord {
