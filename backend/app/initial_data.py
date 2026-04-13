@@ -28,16 +28,17 @@ def init_db():
         db.add(admin)
         print(f"Admin creado: {settings.FIRST_ADMIN_EMAIL}")
 
-    # Programas de ejemplo
+    # Programas oficiales IESTP Enrique López Albújar (9 carreras)
     programs = [
-        {"name": "Administración de Empresas", "faculty": "Administración", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Contabilidad", "faculty": "Ciencias Contables", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Computación e Informática", "faculty": "Computación", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Enfermería Técnica", "faculty": "Salud", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Farmacia", "faculty": "Salud", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Mecánica Automotriz", "faculty": "Mecánica", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Agropecuaria", "faculty": "Agropecuaria", "degree_level": "Técnico", "duration_years": 3},
-        {"name": "Construcción Civil", "faculty": "Construcción", "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Administración de Empresas",                                              "faculty": "Administración",        "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Contabilidad",                                                             "faculty": "Ciencias Contables",    "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Enfermería Técnica",                                                       "faculty": "Salud",                 "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Industrias Alimentarias",                                                  "faculty": "Industrias",            "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Mecatrónica de Producción Industrial",                                     "faculty": "Mecatrónica",           "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Producción Agropecuaria",                                                  "faculty": "Agropecuaria",          "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Mecánica Automotriz",                                                      "faculty": "Mecánica",              "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Construcción Civil",                                                       "faculty": "Construcción",          "degree_level": "Técnico", "duration_years": 3},
+        {"name": "Arquitectura de Plataformas y Servicios de Tecnología de la Información", "faculty": "Tecnología",            "degree_level": "Técnico", "duration_years": 3},
     ]
     for p in programs:
         exists = db.query(Program).filter(Program.name == p["name"]).first()
