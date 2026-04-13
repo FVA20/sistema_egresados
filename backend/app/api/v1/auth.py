@@ -84,6 +84,24 @@ def update_me(
     return current_user
 
 
+@router.post("/graduate-logout")
+def graduate_logout(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+):
+    payload = decode_token(token)
+    if not payload:
+        return {"ok": True}
+    sub: str = payload.get("sub", "")
+    if sub.startswith("graduate_"):
+        graduate_id = int(sub.split("_", 1)[1])
+        graduate = db.query(Graduate).filter(Graduate.id == graduate_id).first()
+        if graduate:
+            graduate.last_seen = None
+            db.commit()
+    return {"ok": True}
+
+
 @router.post("/graduate-ping")
 def graduate_ping(
     token: str = Depends(oauth2_scheme),

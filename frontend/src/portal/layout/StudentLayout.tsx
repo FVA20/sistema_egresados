@@ -19,17 +19,32 @@ export default function StudentLayout() {
 
   const token = localStorage.getItem('graduate_token')
 
+  const sendLogout = (t: string) => {
+    fetch(`${API_BASE}/auth/graduate-logout`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${t}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+      keepalive: true,
+    }).catch(() => {})
+  }
+
   useEffect(() => {
     if (!token) return
     const ping = () => axios.post(`${API_BASE}/auth/graduate-ping`, {}, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {})
     ping()
     const interval = setInterval(ping, 30000)
-    return () => clearInterval(interval)
+    const handleUnload = () => sendLogout(token)
+    window.addEventListener('beforeunload', handleUnload)
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('beforeunload', handleUnload)
+    }
   }, [token])
 
   if (!isAuthenticated) return <Navigate to="/portal/login" replace />
 
   const handleLogout = () => {
+    if (token) sendLogout(token)
     logout()
     navigate('/portal/login')
   }
