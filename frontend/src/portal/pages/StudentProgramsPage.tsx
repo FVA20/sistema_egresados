@@ -33,7 +33,7 @@ export default function StudentProgramsPage() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '36px', fontWeight: 900, color: '#0f172a', margin: '0 0 10px' }}>Mi Programa de Estudio</h1>
+        <h1 style={{ fontSize: '36px', fontWeight: 900, color: '#0f172a', margin: '0 0 10px' }}>Programa de Estudio</h1>
         <p style={{ fontSize: '16px', color: '#94a3b8', margin: 0 }}>Accede a los planes de trabajo de tu carrera</p>
       </div>
 
