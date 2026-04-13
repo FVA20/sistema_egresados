@@ -41,7 +41,7 @@ export default function UsersPage() {
     load()
     const interval = setInterval(() => {
       getGraduates({ limit: 200 }).then(data => setGraduates(data)).catch(() => {})
-    }, 30000)
+    }, 5000)
     return () => clearInterval(interval)
   }, [])
 
