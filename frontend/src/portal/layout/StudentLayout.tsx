@@ -83,9 +83,7 @@ export default function StudentLayout() {
 
           {/* Logo */}
           <Link to="/portal/inicio" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <div style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.18)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', border: '1px solid rgba(255,255,255,0.15)', flexShrink: 0 }}>
-              🎓
-            </div>
+            <img src="/INSIGNIA-ELA.png" alt="IESTP ELA" style={{ width: '38px', height: '38px', borderRadius: '10px', objectFit: 'contain', flexShrink: 0, background: 'rgba(255,255,255,0.95)', padding: '3px' }} />
             <div>
               <p style={{ color: 'white', fontWeight: 800, fontSize: '14px', margin: 0, letterSpacing: '-0.01em' }}>Portal Egresados</p>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px', margin: 0 }}>IESTP Enrique López Albújar</p>
