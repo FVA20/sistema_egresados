@@ -37,7 +37,7 @@ export default function StudentLayout() {
       sendLogout(token)
       try {
         const ch = new BroadcastChannel('graduate_presence')
-        ch.postMessage({ type: 'logout' })
+        ch.postMessage({ type: 'logout', graduateId: graduate?.id })
         ch.close()
       } catch {}
     }
@@ -55,7 +55,7 @@ export default function StudentLayout() {
     // Avisa al admin instantáneamente via BroadcastChannel
     try {
       const ch = new BroadcastChannel('graduate_presence')
-      ch.postMessage({ type: 'logout' })
+      ch.postMessage({ type: 'logout', graduateId: graduate?.id })
       ch.close()
     } catch {}
     logout()

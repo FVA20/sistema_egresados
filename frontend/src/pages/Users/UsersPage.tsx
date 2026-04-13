@@ -46,8 +46,13 @@ export default function UsersPage() {
     let channel: BroadcastChannel | null = null
     try {
       channel = new BroadcastChannel('graduate_presence')
-      channel.onmessage = () => {
-        getGraduates({ limit: 200 }).then(data => setGraduates(data)).catch(() => {})
+      channel.onmessage = (e) => {
+        if (e.data?.type === 'logout' && e.data?.graduateId) {
+          // Actualiza estado local al instante sin esperar al servidor
+          setGraduates(prev => prev.map(g =>
+            g.id === e.data.graduateId ? { ...g, last_seen: undefined } : g
+          ))
+        }
       }
     } catch {}
     return () => {
