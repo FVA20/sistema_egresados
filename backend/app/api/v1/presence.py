@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import func
 from datetime import datetime, timezone, timedelta
-from typing import List
 from app.core.database import get_db
 from app.api.v1.deps import oauth2_scheme, get_current_user
 from app.core.security import decode_token
@@ -11,7 +9,7 @@ from app.models.user import User
 
 router = APIRouter(prefix="/portal", tags=["Presencia"])
 
-ONLINE_THRESHOLD_MINUTES = 2
+ONLINE_THRESHOLD_MINUTES = 3
 
 
 def get_current_graduate(
@@ -43,8 +41,15 @@ def active_graduates(
     db: Session = Depends(get_db),
 ):
     threshold = datetime.now(timezone.utc) - timedelta(minutes=ONLINE_THRESHOLD_MINUTES)
-    rows = db.query(Graduate.id, Graduate.last_seen).all()
+
+    # Comparación en SQL para evitar problemas de timezone en Python
+    online_ids = {
+        row.id for row in
+        db.query(Graduate.id).filter(Graduate.last_seen >= threshold).all()
+    }
+    all_rows = db.query(Graduate.id).all()
+
     return [
-        {"id": r.id, "online": r.last_seen is not None and r.last_seen.replace(tzinfo=timezone.utc) >= threshold}
-        for r in rows
+        {"id": row.id, "online": row.id in online_ids}
+        for row in all_rows
     ]
