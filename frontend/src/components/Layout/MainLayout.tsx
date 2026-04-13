@@ -5,7 +5,8 @@ import { useAuth } from '../../context/AuthContext'
 import apiClient from '../../api/client'
 
 function ProfileModal({ onClose }: { onClose: () => void }) {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser, logout } = useAuth()
+  const handleLogout = () => { logout(); window.location.href = '/login' }
   const [tab, setTab] = useState<'info' | 'password'>('info')
   const [username, setUsername] = useState(user?.username ?? '')
   const [email, setEmail] = useState(user?.email ?? '')
@@ -169,6 +170,26 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
               </button>
             </div>
           )}
+
+          {/* Cerrar sesión */}
+          <div style={{ marginTop: '20px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
+            <button
+              onClick={handleLogout}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                padding: '11px', borderRadius: '12px', border: '1px solid #fecaca', cursor: 'pointer',
+                background: '#fff5f5', color: '#dc2626', fontWeight: 600, fontSize: '14px',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#fee2e2' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#fff5f5' }}
+            >
+              <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              Cerrar sesión
+            </button>
+          </div>
         </div>
       </div>
     </div>
