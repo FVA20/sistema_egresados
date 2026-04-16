@@ -39,6 +39,7 @@ export default function StudentProgramDetailPage() {
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [successId, setSuccessId] = useState<number | null>(null)
+  const [postError, setPostError] = useState('')
 
   useEffect(() => {
     if (!id) return
@@ -66,19 +67,22 @@ export default function StudentProgramDetailPage() {
   const closeModal = () => {
     setModalPlan(null)
     setMessage('')
+    setPostError('')
   }
 
   const handlePostulate = async () => {
     if (!modalPlan) return
     setSubmitting(true)
+    setPostError('')
     try {
       await createPostulation(modalPlan.id, message || undefined)
       setAppliedIds(prev => new Set([...prev, modalPlan.id]))
       setSuccessId(modalPlan.id)
       closeModal()
       setTimeout(() => setSuccessId(null), 3000)
-    } catch {
-      // Ya postulado u otro error — se maneja silenciosamente
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail
+      setPostError(detail || 'Error al enviar la postulación. Intenta nuevamente.')
     } finally {
       setSubmitting(false)
     }
@@ -293,6 +297,15 @@ export default function StudentProgramDetailPage() {
                 />
                 <p style={{ fontSize: '11px', color: '#94a3b8', margin: '4px 0 0', textAlign: 'right' }}>{message.length}/500</p>
               </div>
+
+              {postError && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '12px 16px', borderRadius: '12px', fontSize: '13px', fontWeight: 500 }}>
+                  <svg style={{ width: '16px', height: '16px', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  {postError}
+                </div>
+              )}
 
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button
