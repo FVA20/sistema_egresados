@@ -43,6 +43,16 @@ export default function PostulationsPage() {
     setUpdatingId(null)
   }
 
+  const contactByGmail = async (p: Postulation) => {
+    const subject = `Oportunidad Laboral — ${p.workplan_title} | IESTP Enrique López Albújar`
+    const body = `Estimado/a ${p.graduate_name},\n\nNos complace informarle que ha sido seleccionado/a para presentarse al plan de trabajo:\n\n📋 ${p.workplan_title}\n\nLe invitamos a acercarse a las instalaciones del instituto o comunicarse con nosotros para coordinar los detalles.\n\nAtentamente,\nÁrea de Secretaría Académica\nIESTP Enrique López Albújar`
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(p.graduate_email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const url = `https://accounts.google.com/AccountChooser?continue=${encodeURIComponent(gmailUrl)}`
+    window.open(url, '_blank')
+    // Actualizar estado a "contactado" automáticamente
+    if (p.status !== 'contactado') await updateStatus(p.id, 'contactado')
+  }
+
   const filtered = postulations.filter(p => filter === 'todos' || p.status === filter)
   const pendingCount = postulations.filter(p => p.status === 'pendiente').length
 
@@ -136,7 +146,8 @@ export default function PostulationsPage() {
                   <th>Mensaje</th>
                   <th>Fecha</th>
                   <th>Estado</th>
-                  <th>Acción</th>
+                  <th>Cambiar estado</th>
+                  <th>Contactar</th>
                 </tr>
               </thead>
               <tbody>
@@ -181,6 +192,27 @@ export default function PostulationsPage() {
                           <option value="visto">Visto</option>
                           <option value="contactado">Contactado</option>
                         </select>
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => contactByGmail(p)}
+                          title={`Enviar correo a ${p.graduate_email}`}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            padding: '8px 14px', border: 'none', borderRadius: '10px',
+                            background: '#2563eb', color: 'white',
+                            fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                            boxShadow: '0 2px 8px rgba(37,99,235,0.3)',
+                            whiteSpace: 'nowrap', transition: 'all 0.15s',
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.background = '#1d4ed8')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '#2563eb')}
+                        >
+                          <svg style={{ width: '13px', height: '13px', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                          </svg>
+                          Contactar
+                        </button>
                       </td>
                     </tr>
                   )
