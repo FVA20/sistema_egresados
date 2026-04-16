@@ -43,19 +43,19 @@ export default function StudentProgramDetailPage() {
   useEffect(() => {
     if (!id) return
     const programId = parseInt(id, 10)
-    Promise.all([
-      getWorkPlansByProgram(programId),
-      getPrograms(),
-      getMyPostulations(),
-    ])
-      .then(([plans, programs, myPostulations]) => {
+    // Carga planes y programa (crítico)
+    Promise.all([getWorkPlansByProgram(programId), getPrograms()])
+      .then(([plans, programs]) => {
         setWorkPlans(plans)
         const prog = programs.find(p => p.id === programId)
         if (prog) setProgramName(prog.name)
-        setAppliedIds(new Set(myPostulations.map(p => p.workplan_id)))
       })
       .catch(() => setError('No se pudieron cargar los planes de trabajo.'))
       .finally(() => setLoading(false))
+    // Carga postulaciones propias (no crítico — falla silenciosamente)
+    getMyPostulations()
+      .then(myPostulations => setAppliedIds(new Set(myPostulations.map(p => p.workplan_id))))
+      .catch(() => {})
   }, [id])
 
   const openModal = (plan: WorkPlan) => {
