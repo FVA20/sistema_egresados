@@ -33,6 +33,7 @@ export default function StudentProgramDetailPage() {
 
   // Postulaciones del egresado
   const [appliedIds, setAppliedIds] = useState<Set<number>>(new Set())
+  const [postulationStatus, setPostulationStatus] = useState<Record<number, string>>({})
 
   // Modal de postulación
   const [modalPlan, setModalPlan] = useState<WorkPlan | null>(null)
@@ -55,7 +56,12 @@ export default function StudentProgramDetailPage() {
       .finally(() => setLoading(false))
     // Carga postulaciones propias (no crítico — falla silenciosamente)
     getMyPostulations()
-      .then(myPostulations => setAppliedIds(new Set(myPostulations.map(p => p.workplan_id))))
+      .then(myPostulations => {
+        setAppliedIds(new Set(myPostulations.map(p => p.workplan_id)))
+        const statusMap: Record<number, string> = {}
+        myPostulations.forEach(p => { statusMap[p.workplan_id] = p.status })
+        setPostulationStatus(statusMap)
+      })
       .catch(() => {})
   }, [id])
 
@@ -179,11 +185,20 @@ export default function StudentProgramDetailPage() {
                           Activo
                         </span>
                       )}
-                      {applied && (
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '3px 10px', borderRadius: '100px' }}>
-                          ✓ Postulado
-                        </span>
-                      )}
+                      {applied && (() => {
+                        const st = postulationStatus[plan.id] || 'pendiente'
+                        const stMap: Record<string, { bg: string; color: string; border: string; label: string }> = {
+                          pendiente:  { bg: '#fffbeb', color: '#d97706', border: '#fde68a', label: '⏳ Pendiente' },
+                          visto:      { bg: '#eff6ff', color: '#2563eb', border: '#bfdbfe', label: '👁 Visto' },
+                          contactado: { bg: '#ecfdf5', color: '#059669', border: '#a7f3d0', label: '✓ Contactado' },
+                        }
+                        const s = stMap[st] || stMap.pendiente
+                        return (
+                          <span style={{ fontSize: '11px', fontWeight: 700, color: s.color, background: s.bg, border: `1px solid ${s.border}`, padding: '3px 10px', borderRadius: '100px' }}>
+                            {s.label}
+                          </span>
+                        )
+                      })()}
                     </div>
 
                     {plan.description && (
@@ -222,14 +237,22 @@ export default function StudentProgramDetailPage() {
 
                     {/* Botón Postular */}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
-                      {applied ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#f0fdf4', border: '1px solid #a7f3d0', borderRadius: '12px', fontSize: '14px', fontWeight: 600, color: '#059669' }}>
-                          <svg style={{ width: '16px', height: '16px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
-                          </svg>
-                          Ya postulaste
-                        </div>
-                      ) : (
+                      {applied ? (() => {
+                        const st = postulationStatus[plan.id] || 'pendiente'
+                        if (st === 'contactado') return (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: '12px', fontSize: '14px', fontWeight: 600, color: '#059669' }}>
+                            <svg style={{ width: '16px', height: '16px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
+                            </svg>
+                            El administrador te contactará pronto
+                          </div>
+                        )
+                        return (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '14px', fontWeight: 600, color: '#64748b' }}>
+                            Postulación enviada — en revisión
+                          </div>
+                        )
+                      })() : (
                         <button
                           onClick={() => openModal(plan)}
                           style={{

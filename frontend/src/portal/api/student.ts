@@ -50,7 +50,7 @@ export async function getContactInfo() {
 
 export async function getMyPostulations() {
   const res = await studentApi.get('/postulations/my')
-  return res.data as { id: number; workplan_id: number; status: string }[]
+  return res.data as { id: number; workplan_id: number; workplan_title: string; status: string; created_at: string }[]
 }
 
 export async function createPostulation(workplan_id: number, message?: string) {

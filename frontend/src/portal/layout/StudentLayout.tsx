@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Navigate, Outlet, useNavigate, useLocation, Link } from 'react-router-dom'
 import { useStudentAuth } from '../context/StudentAuthContext'
-import { getPrograms } from '../api/student'
+import { getPrograms, getMyPostulations } from '../api/student'
 import axios from 'axios'
 
 const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : '/api/v1'
@@ -16,6 +16,18 @@ export default function StudentLayout() {
   const [programName, setProgramName] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Notificaciones de postulaciones
+  const [postulations, setPostulations] = useState<{ id: number; workplan_title: string; status: string; created_at: string }[]>([])
+  const [bellOpen, setBellOpen] = useState(false)
+  const [seenIds, setSeenIds] = useState<Set<number>>(() => {
+    try { return new Set(JSON.parse(localStorage.getItem('seen_postulations') || '[]')) } catch { return new Set() }
+  })
+  const bellRef = useRef<HTMLDivElement>(null)
+
+  const loadPostulations = () => {
+    getMyPostulations().then(data => setPostulations(data)).catch(() => {})
+  }
 
   const token = localStorage.getItem('graduate_token')
 
@@ -70,11 +82,18 @@ export default function StudentLayout() {
 
   const initials = `${graduate?.first_name?.[0] ?? ''}${graduate?.last_name?.[0] ?? ''}`.toUpperCase()
 
+  // Cargar postulaciones y polling cada 60s
+  useEffect(() => {
+    loadPostulations()
+    const interval = setInterval(loadPostulations, 60000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Cerrar dropdown avatar al click fuera
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false)
-      }
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setDropdownOpen(false)
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) setBellOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -162,6 +181,76 @@ export default function StudentLayout() {
 
           {/* Derecha: Avatar (desktop) + Hamburguesa (mobile) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+            {/* Campana de notificaciones */}
+            {(() => {
+              const contactados = postulations.filter(p => p.status === 'contactado')
+              const unseen = contactados.filter(p => !seenIds.has(p.id))
+              const openBell = () => {
+                setBellOpen(b => !b)
+                setDropdownOpen(false)
+                if (unseen.length > 0) {
+                  const newSeen = new Set([...seenIds, ...unseen.map(p => p.id)])
+                  setSeenIds(newSeen)
+                  localStorage.setItem('seen_postulations', JSON.stringify([...newSeen]))
+                }
+              }
+              return (
+                <div ref={bellRef} style={{ position: 'relative' }}>
+                  <button
+                    onClick={openBell}
+                    style={{ position: 'relative', width: '38px', height: '38px', background: bellOpen ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '10px', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    {unseen.length > 0 && (
+                      <span style={{ position: 'absolute', top: '4px', right: '4px', width: '16px', height: '16px', background: '#ef4444', borderRadius: '50%', fontSize: '10px', fontWeight: 800, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #006fa0' }}>
+                        {unseen.length}
+                      </span>
+                    )}
+                  </button>
+
+                  {bellOpen && (
+                    <div style={{ position: 'absolute', top: 'calc(100% + 10px)', right: 0, background: 'white', borderRadius: '16px', boxShadow: '0 16px 48px rgba(0,0,0,0.18)', border: '1px solid #e2e8f0', width: '300px', overflow: 'hidden', zIndex: 100 }}>
+                      <div style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                        <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Mis Postulaciones</p>
+                      </div>
+                      {postulations.length === 0 ? (
+                        <div style={{ padding: '24px', textAlign: 'center' }}>
+                          <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>Aún no has postulado a ningún plan</p>
+                        </div>
+                      ) : (
+                        <div style={{ maxHeight: '280px', overflowY: 'auto' }}>
+                          {postulations.map(p => {
+                            const stMap: Record<string, { bg: string; color: string; label: string }> = {
+                              pendiente:  { bg: '#fffbeb', color: '#d97706', label: 'Pendiente' },
+                              visto:      { bg: '#eff6ff', color: '#2563eb', label: 'Visto' },
+                              contactado: { bg: '#ecfdf5', color: '#059669', label: 'Contactado' },
+                            }
+                            const s = stMap[p.status] || stMap.pendiente
+                            return (
+                              <div key={p.id} style={{ padding: '12px 18px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.workplan_title}</p>
+                                  <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>
+                                    {new Date(p.created_at).toLocaleDateString('es-PE', { day: '2-digit', month: 'short' })}
+                                  </p>
+                                </div>
+                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: s.bg, color: s.color, flexShrink: 0 }}>
+                                  {s.label}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
+
 
             {/* Avatar con dropdown — desktop */}
             <div ref={dropdownRef} style={{ position: 'relative' }}>
@@ -300,6 +389,28 @@ export default function StudentLayout() {
             >
               Mi Perfil
             </button>
+
+            {/* Mis postulaciones en móvil */}
+            {postulations.length > 0 && (
+              <div style={{ marginBottom: '4px' }}>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 16px', margin: '8px 0 6px' }}>Mis Postulaciones</p>
+                {postulations.map(p => {
+                  const stMap: Record<string, { color: string; label: string }> = {
+                    pendiente:  { color: '#fbbf24', label: 'Pendiente' },
+                    visto:      { color: '#60a5fa', label: 'Visto' },
+                    contactado: { color: '#34d399', label: 'Contactado' },
+                  }
+                  const s = stMap[p.status] || stMap.pendiente
+                  return (
+                    <div key={p.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 16px', borderRadius: '10px', marginBottom: '2px' }}>
+                      <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{p.workplan_title}</p>
+                      <span style={{ fontSize: '11px', fontWeight: 700, color: s.color, flexShrink: 0, marginLeft: '8px' }}>{s.label}</span>
+                    </div>
+                  )
+                })}
+                <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', margin: '8px 0' }} />
+              </div>
+            )}
 
             {/* Cerrar sesión */}
             <button

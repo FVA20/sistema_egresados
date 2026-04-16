@@ -73,10 +73,23 @@ def get_my_postulations(
     db: Session = Depends(get_db),
     graduate: Graduate = Depends(get_current_graduate),
 ):
-    postulations = db.query(Postulation).filter(
-        Postulation.graduate_id == graduate.id
-    ).all()
-    return [{"id": p.id, "workplan_id": p.workplan_id, "status": p.status} for p in postulations]
+    postulations = (
+        db.query(Postulation)
+        .options(joinedload(Postulation.workplan))
+        .filter(Postulation.graduate_id == graduate.id)
+        .order_by(Postulation.created_at.desc())
+        .all()
+    )
+    return [
+        {
+            "id": p.id,
+            "workplan_id": p.workplan_id,
+            "workplan_title": p.workplan.title if p.workplan else "—",
+            "status": p.status,
+            "created_at": p.created_at.isoformat() if p.created_at else None,
+        }
+        for p in postulations
+    ]
 
 
 # ── Admin: listar todas ─────────────────────────────────────────────────────
