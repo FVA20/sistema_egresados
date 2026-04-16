@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
-from app.api.v1 import auth, graduates, employment, programs, reports, users, workplans, news, contact, surveys, presence
+from app.api.v1 import auth, graduates, employment, programs, reports, users, workplans, news, contact, surveys, presence, postulations
 from app.models import news as _news_model  # noqa: F401 — registra la tabla en Base
+from app.models import postulation as _postulation_model  # noqa: F401 — registra la tabla en Base
 
 
 @asynccontextmanager
@@ -49,6 +50,7 @@ app.include_router(news.router, prefix="/api/v1")
 app.include_router(contact.router, prefix="/api/v1")
 app.include_router(surveys.router, prefix="/api/v1")
 app.include_router(presence.router, prefix="/api/v1")
+app.include_router(postulations.router, prefix="/api/v1")
 
 # Servir archivos subidos
 UPLOAD_DIR = Path(__file__).resolve().parents[2] / "uploads"

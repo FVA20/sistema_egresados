@@ -15,6 +15,7 @@ const UsersPage                = lazy(() => import('./pages/Users/UsersPage'))
 const WorkPlansPage            = lazy(() => import('./pages/WorkPlans/WorkPlansPage'))
 const NewsPage                 = lazy(() => import('./pages/News/NewsPage'))
 const ContactPage              = lazy(() => import('./pages/Contact/ContactPage'))
+const PostulationsPage         = lazy(() => import('./pages/Postulations/PostulationsPage'))
 
 // Portal pages — lazy loaded
 const StudentLoginPage         = lazy(() => import('./portal/pages/StudentLoginPage'))
@@ -58,7 +59,8 @@ export default function App() {
             <Route path="/workplans"  element={<WorkPlansPage />} />
             <Route path="/users"      element={<UsersPage />} />
             <Route path="/news"       element={<NewsPage />} />
-            <Route path="/contact"    element={<ContactPage />} />
+            <Route path="/contact"       element={<ContactPage />} />
+            <Route path="/postulations"  element={<PostulationsPage />} />
           </Route>
 
           {/* ── Portal Egresados ── */}

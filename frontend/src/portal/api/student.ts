@@ -48,4 +48,14 @@ export async function getContactInfo() {
   return res.data as { id: number; key: string; label: string; title: string; description: string }[]
 }
 
+export async function getMyPostulations() {
+  const res = await studentApi.get('/postulations/my')
+  return res.data as { id: number; workplan_id: number; status: string }[]
+}
+
+export async function createPostulation(workplan_id: number, message?: string) {
+  const res = await studentApi.post('/postulations/', { workplan_id, message })
+  return res.data as { id: number; status: string }
+}
+
 export default studentApi
