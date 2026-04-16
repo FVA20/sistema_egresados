@@ -164,7 +164,7 @@ export default function StudentLoginPage() {
             </div>
 
             {/* Campos */}
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
               <div>
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#475569', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -175,7 +175,7 @@ export default function StudentLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  autoComplete="username"
+                  autoComplete="off"
                   placeholder="correo@ejemplo.com o 12345678"
                   style={{
                     width: '100%', padding: '14px 18px',
@@ -196,7 +196,7 @@ export default function StudentLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     placeholder="Sus apellidos"
                     style={{
                       width: '100%', padding: '14px 52px 14px 18px',

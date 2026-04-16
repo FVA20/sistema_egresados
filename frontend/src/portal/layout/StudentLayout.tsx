@@ -98,6 +98,9 @@ export default function StudentLayout() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f9ff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      {/* Previene overlay de autocompletado del navegador */}
+      <input type="text" autoComplete="off" style={{ display: 'none' }} aria-hidden="true" readOnly />
+      <input type="password" autoComplete="new-password" style={{ display: 'none' }} aria-hidden="true" readOnly />
 
       <style>{`
         .student-nav-links { display: flex; align-items: center; gap: 4px; }
