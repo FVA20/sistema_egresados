@@ -33,19 +33,17 @@ function StatCard({ label, value, sub, icon, gradient, textColor, isPercent = fa
 }) {
   const animated = useCountUp(value)
   return (
-    <div
-      className="dash-stat-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300"
-    >
-      <div className="flex items-center" style={{ gap: '18px', marginBottom: '24px' }}>
+    <div className="dash-stat-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div>
+          <p className="font-bold text-slate-800" style={{ fontSize: '14px', lineHeight: '1.3', margin: 0 }}>{label}</p>
+          <p className="text-slate-400" style={{ fontSize: '12px', marginTop: '3px' }}>{sub}</p>
+        </div>
         <div
           className={`rounded-2xl flex items-center justify-center flex-shrink-0 ${gradient}`}
-          style={{ width: '60px', height: '60px' }}
+          style={{ width: '48px', height: '48px' }}
         >
           {icon}
-        </div>
-        <div>
-          <p className="font-bold text-slate-800" style={{ fontSize: '15px', lineHeight: '1.3' }}>{label}</p>
-          <p className="text-slate-400" style={{ fontSize: '13px', marginTop: '5px' }}>{sub}</p>
         </div>
       </div>
       <p className={`dash-stat-number font-black leading-none tabular-nums ${textColor}`}>
@@ -96,42 +94,41 @@ export default function DashboardPage() {
         .dash-stat-card { padding: 28px 32px; }
         .dash-stat-number { font-size: 50px; }
         .dash-inner-card { padding: 40px 44px; }
+        .dash-bar-chart { height: 320px; }
+        .dash-pie-chart { height: 200px; }
         @media (max-width: 640px) {
-          .dash-banner-inner { padding: 28px 24px; }
-          .dash-banner-title { font-size: 28px; }
-          .dash-stat-card { padding: 20px 20px; }
-          .dash-stat-number { font-size: 36px; }
-          .dash-inner-card { padding: 20px 20px; }
+          .dash-banner-inner { padding: 20px 18px; }
+          .dash-banner-title { font-size: 22px; }
+          .dash-stat-card { padding: 16px 16px; }
+          .dash-stat-number { font-size: 32px; }
+          .dash-inner-card { padding: 18px 16px; }
+          .dash-bar-chart { height: 230px; }
+          .dash-pie-chart { height: 170px; }
         }
       `}</style>
 
       {/* ── Banner ── */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl text-white shadow-xl overflow-hidden">
-        <div
-          className="dash-banner-inner flex flex-col sm:flex-row sm:items-center justify-between"
-          style={{ gap: '32px' }}
-        >
-          <div style={{ paddingLeft: '4px' }}>
-            <h1 className="dash-banner-title font-black tracking-tight" style={{ lineHeight: 1.1 }}>
+        <div className="dash-banner-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+          <div>
+            <h1 className="dash-banner-title font-black tracking-tight" style={{ lineHeight: 1.1, margin: 0 }}>
               Panel de Control
             </h1>
-            <p className="text-blue-200 capitalize" style={{ fontSize: '17px', marginTop: '14px' }}>
+            <p className="text-blue-200 capitalize" style={{ fontSize: '14px', marginTop: '8px', margin: '8px 0 0' }}>
               {new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
-          <div
-            className="flex flex-col items-start sm:items-end flex-shrink-0"
-            style={{ gap: '10px', paddingRight: '16px' }}
-          >
-            <span
-              className="inline-flex items-center text-white bg-white/20 border border-white/30 rounded-full font-semibold"
-              style={{ gap: '10px', padding: '10px 24px', fontSize: '15px' }}
-            >
-              <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse" />
-              Sistema en línea
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', flexShrink: 0 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)',
+              borderRadius: '99px', padding: '8px 18px', fontSize: '13px', fontWeight: 600,
+            }}>
+              <span style={{ width: '8px', height: '8px', background: '#34d399', borderRadius: '50%', animation: 'pulse 2s infinite', flexShrink: 0 }} />
+              En línea
             </span>
-            <span className="text-blue-200" style={{ fontSize: '13px' }}>
-              Actualizado: {lastUpdate.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+              {lastUpdate.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
             </span>
           </div>
         </div>
@@ -222,7 +219,8 @@ export default function DashboardPage() {
               {stats.total_graduates} total
             </span>
           </div>
-          <ResponsiveContainer width="100%" height={320}>
+          <div className="dash-bar-chart">
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats.by_program} barSize={28} barCategoryGap="40%" margin={{ top: 4, right: 4, left: 0, bottom: 90 }}>
               <XAxis
                 dataKey="program"
@@ -258,6 +256,7 @@ export default function DashboardPage() {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -284,7 +283,8 @@ export default function DashboardPage() {
             </div>
           ) : (
             <>
-              <ResponsiveContainer width="100%" height={200}>
+              <div className="dash-pie-chart">
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={stats.top_sectors}
@@ -305,6 +305,7 @@ export default function DashboardPage() {
                   />
                 </PieChart>
               </ResponsiveContainer>
+              </div>
               <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {stats.top_sectors.map((s, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

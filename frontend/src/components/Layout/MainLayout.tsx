@@ -231,16 +231,25 @@ export default function MainLayout() {
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
-        <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+        <header style={{
+          background: 'white', borderBottom: '1px solid #e2e8f0',
+          padding: '0 12px', height: '62px', flexShrink: 0,
+          display: 'flex', alignItems: 'center', gap: '8px',
+          position: 'sticky', top: 0, zIndex: 20,
+          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+        }}>
+
+          {/* Hamburger — solo móvil */}
           {isMobile && (
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               style={{
-                display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', justifyContent: 'center',
-                width: '42px', height: '42px', borderRadius: '12px', border: '1px solid #e2e8f0',
-                background: 'white', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
+                display: 'flex', flexDirection: 'column', gap: '5px',
+                alignItems: 'center', justifyContent: 'center',
+                width: '40px', height: '40px', borderRadius: '11px',
+                border: '1px solid #e2e8f0', background: 'white',
+                cursor: 'pointer', flexShrink: 0,
               }}
-              title="Menú"
             >
               <span style={{ width: '16px', height: '2px', background: '#475569', borderRadius: '2px' }} />
               <span style={{ width: '12px', height: '2px', background: '#475569', borderRadius: '2px' }} />
@@ -248,28 +257,57 @@ export default function MainLayout() {
             </button>
           )}
 
-          {/* Right side — clic abre perfil */}
+          {/* Branding — solo móvil (centro) */}
+          {isMobile && (
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '9px' }}>
+              <div style={{
+                width: '32px', height: '32px',
+                background: 'linear-gradient(135deg, #2563eb, #4f46e5)',
+                borderRadius: '9px', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 3px 8px rgba(37,99,235,0.25)',
+              }}>
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white">
+                  <path d="M12 14l9-5-9-5-9 5 9 5z" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}/>
+                </svg>
+              </div>
+              <div>
+                <p style={{ fontWeight: 800, fontSize: '13px', color: '#0f172a', margin: 0, lineHeight: 1.2 }}>Sistema de</p>
+                <p style={{ fontWeight: 800, fontSize: '13px', color: '#2563eb', margin: 0, lineHeight: 1.2 }}>Egresados</p>
+              </div>
+            </div>
+          )}
+
+          {/* Spacer — solo desktop */}
+          {!isMobile && <div style={{ flex: 1 }} />}
+
+          {/* Avatar — abre perfil */}
           <button
             onClick={() => setProfileOpen(true)}
             style={{
-              display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto',
-              background: 'none', border: 'none', cursor: 'pointer', padding: '6px 10px',
-              borderRadius: '14px', transition: 'background 0.15s',
+              display: 'flex', alignItems: 'center', gap: '10px',
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '6px 8px', borderRadius: '12px',
+              transition: 'background 0.15s', flexShrink: 0,
             }}
             onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
             onMouseLeave={e => (e.currentTarget.style.background = 'none')}
             title="Ver perfil"
           >
-            <div className="hidden sm:block text-right">
-              <p className="text-sm font-bold text-slate-800 leading-none">{user?.username}</p>
-              <p className="text-xs text-slate-400 mt-1 capitalize">{user?.role === 'admin' ? 'Administrador' : 'Visualizador'}</p>
-            </div>
+            {!isMobile && (
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: '14px', fontWeight: 700, color: '#1e293b', margin: 0, lineHeight: 1.2 }}>{user?.username}</p>
+                <p style={{ fontSize: '12px', color: '#94a3b8', margin: '2px 0 0', textTransform: 'capitalize' }}>
+                  {user?.role === 'admin' ? 'Administrador' : 'Visualizador'}
+                </p>
+              </div>
+            )}
             <div style={{
-              width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0,
+              width: '38px', height: '38px', borderRadius: '11px', flexShrink: 0,
               background: 'linear-gradient(135deg, #3b82f6, #4f46e5)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '15px', fontWeight: 700, color: 'white',
-              boxShadow: '0 4px 10px rgba(37,99,235,0.35)',
+              boxShadow: '0 3px 8px rgba(37,99,235,0.3)',
             }}>
               {user?.username?.[0]?.toUpperCase()}
             </div>
@@ -277,7 +315,7 @@ export default function MainLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 py-4 px-6 sm:py-6 sm:px-10 lg:py-10 lg:px-14 overflow-auto w-full">
+        <main className="flex-1 p-4 sm:py-6 sm:px-10 lg:py-10 lg:px-14 overflow-auto w-full">
           <Outlet />
         </main>
 
