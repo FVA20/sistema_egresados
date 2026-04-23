@@ -315,7 +315,7 @@ export default function MainLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:py-6 sm:px-10 lg:py-10 lg:px-14 overflow-auto w-full">
+        <main className="flex-1 py-4 px-5 sm:py-6 sm:px-10 lg:py-10 lg:px-14 overflow-auto w-full">
           <Outlet />
         </main>
 
