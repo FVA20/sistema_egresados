@@ -60,6 +60,9 @@ export default function PostulationsPage() {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg) } }
 
+        /* Header top */
+        .post-page-header { margin-bottom: 24px; }
+
         /* Stats */
         .post-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
         .post-stat  { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
@@ -80,19 +83,21 @@ export default function PostulationsPage() {
         .post-table tr:hover td { background: #fafbfc; }
 
         @media (max-width: 768px) {
-          .post-stats  { grid-template-columns: repeat(3,1fr); gap: 8px; }
+          .post-page-header { padding-left: 6px; }
+          .post-stats  { grid-template-columns: repeat(3,1fr); gap: 8px; padding-left: 6px; padding-right: 6px; }
           .post-stat   { padding: 14px 12px; border-radius: 12px; }
           .post-stat-lbl { font-size: 9px; }
           .post-stat-val { font-size: 20px; }
+          .post-filters { padding-left: 6px; }
           .post-table-wrap { display: none; }
-          .post-cards-wrap { display: flex; flex-direction: column; gap: 14px; padding: 4px 2px; }
+          .post-cards-wrap { display: flex; flex-direction: column; gap: 14px; padding: 4px 6px; }
           .post-outer { background: transparent !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
           .post-card-inner { padding: 18px !important; }
         }
       `}</style>
 
       {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
+      <div className="post-page-header">
         <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#0f172a', margin: '0 0 4px' }}>Postulaciones</h1>
         <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>Egresados que postularon a planes de trabajo</p>
       </div>
