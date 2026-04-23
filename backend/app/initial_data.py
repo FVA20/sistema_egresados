@@ -36,27 +36,40 @@ def init_db():
         db.add(admin)
         print(f"Admin creado: {settings.FIRST_ADMIN_EMAIL}")
 
-    # ── Eliminar programas duplicados ──────────────────────────────────────────
-    # Agrupa todos los programas por nombre normalizado y conserva el de menor ID.
+    # ── Eliminar programas duplicados y corregir nombres ──────────────────────
+    # Mapa de nombre canónico (con tildes correctas) por nombre normalizado
+    canonical_names = {_norm(p["name"]): p["name"] for p in [
+        {"name": "Administración de Empresas"},
+        {"name": "Contabilidad"},
+        {"name": "Enfermería Técnica"},
+        {"name": "Industrias Alimentarias"},
+        {"name": "Mecatrónica de Producción Industrial"},
+        {"name": "Producción Agropecuaria"},
+        {"name": "Mecánica Automotriz"},
+        {"name": "Construcción Civil"},
+        {"name": "Arquitectura de Plataformas y Servicios de Tecnología de la Información"},
+    ]}
+
     all_programs = db.query(Program).order_by(Program.id).all()
     canonical: dict[str, int] = {}   # normalized_name -> canonical_id
     for prog in all_programs:
         norm = _norm(prog.name)
         if norm not in canonical:
             canonical[norm] = prog.id
+            # Corregir nombre si tiene error de tilde
+            correct_name = canonical_names.get(norm)
+            if correct_name and prog.name != correct_name:
+                prog.name = correct_name
+                print(f"Nombre corregido: '{prog.name}' → '{correct_name}' (id={prog.id})")
         else:
-            # Es un duplicado — reasignar sus egresados y planes antes de borrar
+            # Es un duplicado — reasignar egresados y planes antes de borrar
             can_id = canonical[norm]
-            reassigned_g = db.query(Graduate).filter(Graduate.program_id == prog.id).count()
-            if reassigned_g:
-                db.query(Graduate).filter(Graduate.program_id == prog.id).update(
-                    {"program_id": can_id}, synchronize_session=False
-                )
-            reassigned_w = db.query(WorkPlan).filter(WorkPlan.program_id == prog.id).count()
-            if reassigned_w:
-                db.query(WorkPlan).filter(WorkPlan.program_id == prog.id).update(
-                    {"program_id": can_id}, synchronize_session=False
-                )
+            db.query(Graduate).filter(Graduate.program_id == prog.id).update(
+                {"program_id": can_id}, synchronize_session=False
+            )
+            db.query(WorkPlan).filter(WorkPlan.program_id == prog.id).update(
+                {"program_id": can_id}, synchronize_session=False
+            )
             db.delete(prog)
             print(f"Duplicado eliminado: '{prog.name}' (id={prog.id}) → conservado id={can_id}")
     db.flush()
