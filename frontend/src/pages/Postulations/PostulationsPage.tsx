@@ -86,6 +86,7 @@ export default function PostulationsPage() {
           .post-stat-val { font-size: 20px; }
           .post-table-wrap { display: none; }
           .post-cards-wrap { display: flex; flex-direction: column; gap: 12px; }
+          .post-outer { background: transparent !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
         }
       `}</style>
 
@@ -137,7 +138,7 @@ export default function PostulationsPage() {
       </div>
 
       {/* Contenido */}
-      <div style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+      <div className="post-outer" style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '60px' }}>
             <div style={{ width: '36px', height: '36px', border: '3px solid #e2e8f0', borderTopColor: '#2563eb', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
@@ -226,7 +227,7 @@ export default function PostulationsPage() {
             </div>
 
             {/* ── MÓVIL: tarjetas ── */}
-            <div className="post-cards-wrap" style={{ padding: '16px' }}>
+            <div className="post-cards-wrap">
               {filtered.map(p => {
                 const s = STATUS_STYLES[p.status]
                 return (
