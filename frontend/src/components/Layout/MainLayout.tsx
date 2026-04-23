@@ -211,7 +211,7 @@ export default function MainLayout() {
   if (!isAuthenticated) return <Navigate to="/login" replace />
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen bg-slate-100" style={{ overflowX: 'hidden', maxWidth: '100vw' }}>
 
       {profileOpen && <ProfileModal onClose={() => setProfileOpen(false)} />}
 
