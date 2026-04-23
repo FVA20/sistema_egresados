@@ -81,12 +81,13 @@ export default function PostulationsPage() {
 
         @media (max-width: 768px) {
           .post-stats  { grid-template-columns: repeat(3,1fr); gap: 8px; }
-          .post-stat   { padding: 12px 10px; border-radius: 12px; }
+          .post-stat   { padding: 14px 12px; border-radius: 12px; }
           .post-stat-lbl { font-size: 9px; }
           .post-stat-val { font-size: 20px; }
           .post-table-wrap { display: none; }
-          .post-cards-wrap { display: flex; flex-direction: column; gap: 12px; }
+          .post-cards-wrap { display: flex; flex-direction: column; gap: 14px; padding: 4px 2px; }
           .post-outer { background: transparent !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
+          .post-card-inner { padding: 18px !important; }
         }
       `}</style>
 
@@ -231,7 +232,7 @@ export default function PostulationsPage() {
               {filtered.map(p => {
                 const s = STATUS_STYLES[p.status]
                 return (
-                  <div key={p.id} style={{ border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', background: '#fafbfc' }}>
+                  <div key={p.id} className="post-card-inner" style={{ border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px', background: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
 
                     {/* Fila 1: Nombre + Badge estado */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '12px' }}>

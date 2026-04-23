@@ -315,7 +315,12 @@ export default function MainLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 py-4 px-5 sm:py-6 sm:px-10 lg:py-10 lg:px-14 overflow-auto w-full">
+        <style>{`
+          .main-content { padding: 16px 20px; }
+          @media (min-width: 640px)  { .main-content { padding: 24px 40px; } }
+          @media (min-width: 1024px) { .main-content { padding: 40px 56px; } }
+        `}</style>
+        <main className="main-content flex-1 overflow-auto w-full">
           <Outlet />
         </main>
 
