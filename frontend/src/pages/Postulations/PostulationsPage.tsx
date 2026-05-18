@@ -99,7 +99,7 @@ export default function PostulationsPage() {
       {/* Header */}
       <div className="post-page-header">
         <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#0f172a', margin: '0 0 4px' }}>Postulaciones</h1>
-        <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>Egresados que postularon a planes de trabajo</p>
+        <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>Egresados que postularon a convocatorias</p>
       </div>
 
       {/* Stats */}

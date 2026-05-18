@@ -34,7 +34,7 @@ export default function StudentProgramsPage() {
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{ fontSize: '36px', fontWeight: 900, color: '#0f172a', margin: '0 0 10px' }}>Programa de Estudio</h1>
-        <p style={{ fontSize: '16px', color: '#94a3b8', margin: 0 }}>Accede a los planes de trabajo de tu carrera</p>
+        <p style={{ fontSize: '16px', color: '#94a3b8', margin: 0 }}>Accede a las convocatorias de tu carrera</p>
       </div>
 
       {loading && (
@@ -116,7 +116,7 @@ export default function StudentProgramsPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Ver planes de trabajo
+                Ver convocatorias
               </button>
             </div>
           </div>
@@ -127,10 +127,10 @@ export default function StudentProgramsPage() {
               <svg style={{ width: '20px', height: '20px', color: '#00aae4', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <p style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>¿Qué son los planes de trabajo?</p>
+              <p style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>¿Qué son las convocatorias?</p>
             </div>
             <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.7, margin: 0 }}>
-              Los planes de trabajo son documentos elaborados por el instituto que contienen propuestas laborales, convocatorias y orientación profesional específica para tu carrera. Puedes descargar los archivos adjuntos para revisarlos con detalle.
+              Las convocatorias son documentos elaborados por el instituto que contienen propuestas laborales, oportunidades de empleo y orientación profesional específica para tu carrera. Puedes descargar los archivos adjuntos para revisarlos con detalle.
             </p>
           </div>
         </div>

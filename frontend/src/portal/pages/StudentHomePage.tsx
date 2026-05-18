@@ -18,7 +18,7 @@ const benefits = [
       </svg>
     ),
     title: 'Oportunidades Laborales',
-    description: 'Accede a planes de trabajo y oportunidades laborales de tu carrera.',
+    description: 'Accede a convocatorias y oportunidades laborales de tu carrera.',
     color: '#00aae4',
     bg: '#f0fbff',
   },
@@ -115,7 +115,7 @@ export default function StudentHomePage() {
               Bienvenido,<br />{graduate?.first_name}
             </h1>
             <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.7)', maxWidth: '480px', lineHeight: 1.7, margin: '0 0 40px' }}>
-              Este es tu espacio para acceder a convocatorias laborales, planes de trabajo y mantenerte conectado con el instituto.
+              Este es tu espacio para acceder a convocatorias y oportunidades laborales, y mantenerte conectado con el instituto.
             </p>
             <button
               onClick={() => navigate('/portal/programas')}
@@ -135,7 +135,7 @@ export default function StudentHomePage() {
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)' }}
             >
-              Ver Planes de Trabajo →
+              Ver Convocatorias →
             </button>
           </div>
         </div>

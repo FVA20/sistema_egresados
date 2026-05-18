@@ -52,7 +52,7 @@ export default function StudentProgramDetailPage() {
         const prog = programs.find(p => p.id === programId)
         if (prog) setProgramName(prog.name)
       })
-      .catch(() => setError('No se pudieron cargar los planes de trabajo.'))
+      .catch(() => setError('No se pudieron cargar las convocatorias.'))
       .finally(() => setLoading(false))
     // Carga postulaciones propias (no crítico — falla silenciosamente)
     getMyPostulations()
@@ -122,7 +122,7 @@ export default function StudentProgramDetailPage() {
             </svg>
           </div>
           <div>
-            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px' }}>Planes de Trabajo</p>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px' }}>Convocatorias</p>
             <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'white', margin: 0, lineHeight: 1.2 }}>{programName || 'Cargando...'}</h1>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function StudentProgramDetailPage() {
         <div style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '60px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
           <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '0 0 8px' }}>No hay planes disponibles</h3>
-          <p style={{ color: '#94a3b8', margin: 0 }}>No hay planes de trabajo disponibles para este programa aún.</p>
+          <p style={{ color: '#94a3b8', margin: 0 }}>No hay convocatorias disponibles para este programa aún.</p>
         </div>
       )}
 
