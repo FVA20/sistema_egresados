@@ -225,7 +225,7 @@ export default function EmploymentPage() {
                       {[
                         { key: 'is_employed', label: '¿Está trabajando actualmente?' },
                         { key: 'is_career_related', label: '¿Relacionado a su carrera?' },
-                        { key: 'is_current', label: '¿Es el registro vigente?' },
+                        { key: 'is_current', label: '¿Emprendimiento?' },
                       ].map(c => (
                         <label key={c.key} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                           <button type="button" onClick={() => setForm({ ...form, [c.key]: !(form as any)[c.key] })}
