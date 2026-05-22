@@ -242,12 +242,12 @@ export default function WorkPlansPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                   </svg>
                 </div>
-                <p className="font-bold text-slate-700" style={{ fontSize: '17px', margin: 0 }}>No hay planes de trabajo</p>
-                <p className="text-slate-400" style={{ fontSize: '14px', margin: 0 }}>Crea el primer plan para este programa</p>
+                <p className="font-bold text-slate-700" style={{ fontSize: '17px', margin: 0 }}>No hay convocatorias</p>
+                <p className="text-slate-400" style={{ fontSize: '14px', margin: 0 }}>Crea la primera convocatoria para este programa</p>
                 <button onClick={openNew} className="inline-flex items-center bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors"
                   style={{ gap: '8px', padding: '13px 24px', fontSize: '14px', marginTop: '8px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(37,99,235,0.35)' }}>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4"/></svg>
-                  Crear plan de trabajo
+                  Crear convocatoria
                 </button>
               </div>
             ) : (
@@ -366,7 +366,7 @@ export default function WorkPlansPage() {
               </div>
               <div style={{ flex: 1 }}>
                 <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                  {editing ? 'Editar Plan de Trabajo' : 'Nuevo Plan de Trabajo'}
+                  {editing ? 'Editar Convocatoria' : 'Nueva Convocatoria'}
                 </h2>
                 <p style={{ fontSize: '13px', color: '#94a3b8', margin: '3px 0 0' }}>{selectedProgram?.name}</p>
               </div>
@@ -518,7 +518,7 @@ export default function WorkPlansPage() {
                 </button>
                 <button type="submit" disabled={saving || uploadProgress}
                   style={{ flex: 1, padding: '13px', border: 'none', borderRadius: '12px', fontSize: '14px', fontWeight: 700, color: 'white', background: '#2563eb', cursor: (saving || uploadProgress) ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(37,99,235,0.35)', opacity: (saving || uploadProgress) ? 0.6 : 1 }}>
-                  {uploadProgress ? 'Subiendo archivo...' : saving ? 'Guardando...' : editing ? 'Actualizar Plan' : 'Crear Plan'}
+                  {uploadProgress ? 'Subiendo archivo...' : saving ? 'Guardando...' : editing ? 'Actualizar Convocatoria' : 'Crear Convocatoria'}
                 </button>
               </div>
             </form>
