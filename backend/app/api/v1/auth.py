@@ -14,7 +14,7 @@ router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 
 class GraduateLoginRequest(BaseModel):
-    email: str
+    document_number: str
     password: str
 
 
@@ -124,12 +124,11 @@ def graduate_ping(
 
 @router.post("/graduate-login", response_model=GraduateTokenResponse)
 def graduate_login(data: GraduateLoginRequest, db: Session = Depends(get_db)):
-    email_input = data.email.strip()
-    password_input = data.password.strip()
-    graduate = db.query(Graduate).filter(
-        (Graduate.email == email_input) | (Graduate.document_number == email_input)
-    ).first()
-    if not graduate or graduate.last_name.lower().strip() != password_input.lower():
+    document_input = data.document_number.strip()
+    password_input = ''.join(data.password.lower().split())
+    graduate = db.query(Graduate).filter(Graduate.document_number == document_input).first()
+    expected_password = ''.join(graduate.last_name.lower().split()) if graduate else ''
+    if not graduate or expected_password != password_input:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Credenciales incorrectas",

@@ -5,7 +5,7 @@ import { loginGraduate } from '../api/student'
 
 export default function StudentLoginPage() {
   const { isAuthenticated } = useStudentAuth()
-  const [email, setEmail] = useState('')
+  const [dni, setDni] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -19,12 +19,12 @@ export default function StudentLoginPage() {
     setError('')
     setLoading(true)
     try {
-      const data = await loginGraduate(email, password)
+      const data = await loginGraduate(dni, password)
       localStorage.setItem('graduate_token', data.access_token)
       localStorage.setItem('graduate_user', JSON.stringify(data.graduate))
       window.location.href = '/portal/inicio'
     } catch {
-      setError('Credenciales incorrectas. Verifique su correo/DNI y apellidos.')
+      setError('Credenciales incorrectas. Verifique su DNI y apellidos.')
       setLoading(false)
     }
   }
@@ -159,7 +159,7 @@ export default function StudentLoginPage() {
                 Bienvenido
               </h2>
               <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.5 }}>
-                Ingresa tu correo o N° DNI y tus apellidos para acceder
+                Ingresa tu N° DNI y tus apellidos para acceder
               </p>
             </div>
 
@@ -168,15 +168,15 @@ export default function StudentLoginPage() {
 
               <div>
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#475569', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Correo o N° DNI
+                  N° DNI
                 </label>
                 <input
                   type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={dni}
+                  onChange={(e) => setDni(e.target.value)}
                   required
                   autoComplete="off"
-                  placeholder="correo@ejemplo.com o 12345678"
+                  placeholder="Ingresa tu número de DNI"
                   style={{
                     width: '100%', padding: '14px 18px',
                     border: '1.5px solid #e2e8f0', borderRadius: '14px',
@@ -286,14 +286,13 @@ export default function StudentLoginPage() {
 
             <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0f172a', margin: '0 0 12px' }}>¿Olvidaste tu clave?</h3>
             <p style={{ fontSize: '15px', color: '#64748b', lineHeight: 1.7, margin: '0 0 24px' }}>
-              Tu clave de acceso al portal son tus <strong style={{ color: '#0f172a' }}>apellidos</strong>.<br />
-              Escríbelos tal como están registrados en el sistema.
+              Tu clave de acceso al portal son tus <strong style={{ color: '#0f172a' }}>apellidos juntos en minúscula</strong>, sin espacios ni mayúsculas.
             </p>
 
             <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '16px 20px', marginBottom: '24px' }}>
               <p style={{ fontSize: '12px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 6px' }}>Ejemplo</p>
               <p style={{ fontSize: '15px', color: '#334155', margin: 0 }}>
-                Si te llamas <strong>Juan García López</strong>,<br />tu clave es: <strong style={{ color: '#00aae4' }}>Garcia Lopez</strong>
+                Si tus apellidos son <strong>García López</strong>,<br />tu clave es: <strong style={{ color: '#00aae4' }}>garcialopez</strong>
               </p>
             </div>
 

@@ -22,8 +22,8 @@ studentApi.interceptors.response.use(
   }
 )
 
-export async function loginGraduate(email: string, password: string) {
-  const res = await studentApi.post('/auth/graduate-login', { email, password })
+export async function loginGraduate(document_number: string, password: string) {
+  const res = await studentApi.post('/auth/graduate-login', { document_number, password })
   return res.data as { access_token: string; graduate: { id: number; first_name: string; last_name: string; email: string; program_id: number } }
 }
 
