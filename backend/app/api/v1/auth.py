@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timezone
+import unicodedata
 from app.core.database import get_db
 from app.core.security import verify_password, create_access_token, hash_password, decode_token
 from app.models.user import User
@@ -122,12 +123,19 @@ def graduate_ping(
     return {"ok": True}
 
 
+def _normalize(text: str) -> str:
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', text.lower())
+        if unicodedata.category(c) != 'Mn'
+    ).replace(' ', '')
+
+
 @router.post("/graduate-login", response_model=GraduateTokenResponse)
 def graduate_login(data: GraduateLoginRequest, db: Session = Depends(get_db)):
     document_input = data.document_number.strip()
-    password_input = ''.join(data.password.lower().split())
+    password_input = _normalize(data.password)
     graduate = db.query(Graduate).filter(Graduate.document_number == document_input).first()
-    expected_password = ''.join(graduate.last_name.lower().split()) if graduate else ''
+    expected_password = _normalize(graduate.last_name) if graduate else ''
     if not graduate or expected_password != password_input:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
