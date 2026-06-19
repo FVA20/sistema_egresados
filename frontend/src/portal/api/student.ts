@@ -24,7 +24,8 @@ studentApi.interceptors.response.use(
 )
 
 export async function loginGraduate(document_number: string, password: string) {
-  const res = await studentApi.post('/auth/graduate-login', { document_number, password })
+  // Enviamos ambos campos: 'document_number' (código nuevo) y 'email' (código viejo en Render)
+  const res = await studentApi.post('/auth/graduate-login', { document_number, email: document_number, password })
   return res.data as { access_token: string; graduate: { id: number; first_name: string; last_name: string; email: string; program_id: number } }
 }
 
