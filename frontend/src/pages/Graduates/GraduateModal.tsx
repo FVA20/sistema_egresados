@@ -101,7 +101,7 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
               <input name="document_number" value={form.document_number} onChange={set} required placeholder="Ej: 74512369" style={inputStyle} />
             </div>
             <div>
-              <label style={labelStyle}>Correo Electrónico <span style={{ fontWeight: 400, color: '#cbd5e1' }}>(opcional)</span></label>
+              <label style={labelStyle}>Correo Electrónico <span style={{ fontWeight: 500, color: '#94a3b8', textTransform: 'none', letterSpacing: 0, fontSize: '11px' }}>(opcional)</span></label>
               <input name="email" type="email" value={form.email} onChange={set} placeholder="correo@ejemplo.com" style={inputStyle} />
             </div>
           </div>
