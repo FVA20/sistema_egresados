@@ -324,7 +324,7 @@ export default function WorkPlansPage() {
                             <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Archivo adjunto</p>
                           </div>
                           <a
-                            href={`/uploads/${plan.file_path}`}
+                            href={`${import.meta.env.VITE_API_URL || ''}/uploads/${plan.file_path}`}
                             target="_blank"
                             rel="noreferrer"
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', background: 'white', border: `1px solid ${fi.color}55`, borderRadius: '8px', fontSize: '12px', fontWeight: 600, color: fi.color, textDecoration: 'none', flexShrink: 0 }}

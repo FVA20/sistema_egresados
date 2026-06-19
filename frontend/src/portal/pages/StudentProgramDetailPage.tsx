@@ -241,7 +241,7 @@ export default function StudentProgramDetailPage() {
                             </div>
                           </div>
                           <a
-                            href={`/uploads/${plan.file_path}`}
+                            href={`${import.meta.env.VITE_API_URL || ''}/uploads/${plan.file_path}`}
                             target="_blank"
                             rel="noreferrer"
                             className="wp-download-btn"

@@ -66,7 +66,7 @@ export default function NewsPage() {
       link: item.link || '', is_published: item.is_published,
     })
     setPendingImg(null); setPendingFile(null)
-    setPreviewUrl(item.image_path ? `/uploads/${item.image_path}` : null)
+    setPreviewUrl(item.image_path ? `${import.meta.env.VITE_API_URL || ''}/uploads/${item.image_path}` : null)
     setShowForm(true)
   }
 
@@ -182,7 +182,7 @@ export default function NewsPage() {
           )}
           {news.map(item => (
             <div key={item.id} onClick={() => setSelected(item)} className="group bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all cursor-pointer" style={{ borderColor: selected?.id === item.id ? '#2563eb' : '#e2e8f0', overflow: 'hidden' }}>
-              {item.image_path && <img src={`/uploads/${item.image_path}`} alt={item.title} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />}
+              {item.image_path && <img src={`${import.meta.env.VITE_API_URL || ''}/uploads/${item.image_path}`} alt={item.title} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />}
               <div style={{ padding: '18px 22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -228,7 +228,7 @@ export default function NewsPage() {
                   {previewUrl ? (
                     <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden' }}>
                       <img src={previewUrl} alt="preview" style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
-                      <button type="button" onClick={() => { if (editing?.image_path && !pendingImg) handleDeleteImage(editing); else { setPendingImg(null); setPreviewUrl(editing?.image_path ? `/uploads/${editing.image_path}` : null) } if (imgRef.current) imgRef.current.value = '' }} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '8px', color: 'white', padding: '6px', cursor: 'pointer' }}>
+                      <button type="button" onClick={() => { if (editing?.image_path && !pendingImg) handleDeleteImage(editing); else { setPendingImg(null); setPreviewUrl(editing?.image_path ? `${import.meta.env.VITE_API_URL || ''}/uploads/${editing.image_path}` : null) } if (imgRef.current) imgRef.current.value = '' }} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '8px', color: 'white', padding: '6px', cursor: 'pointer' }}>
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
                       </button>
                     </div>
@@ -330,7 +330,7 @@ export default function NewsPage() {
 
           ) : selected ? (
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              {selected.image_path && <img src={`/uploads/${selected.image_path}`} alt={selected.title} style={{ width: '100%', height: '210px', objectFit: 'cover' }} />}
+              {selected.image_path && <img src={`${import.meta.env.VITE_API_URL || ''}/uploads/${selected.image_path}`} alt={selected.title} style={{ width: '100%', height: '210px', objectFit: 'cover' }} />}
               <div style={{ padding: '28px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '99px', background: cat(selected.category).bg, color: cat(selected.category).color, border: `1px solid ${cat(selected.category).border}` }}>{selected.category}</span>
@@ -360,7 +360,7 @@ export default function NewsPage() {
                         <p style={{ fontSize: '11px', color: info.color, marginTop: '2px', fontWeight: 600 }}>{info.label}</p>
                       </div>
                       <div style={{ display: 'flex', gap: '6px' }}>
-                        <a href={`/uploads/${selected.file_path}`} download={selected.file_name} style={{ padding: '7px 12px', background: '#2563eb', color: 'white', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <a href={`${import.meta.env.VITE_API_URL || ''}/uploads/${selected.file_path}`} download={selected.file_name} style={{ padding: '7px 12px', background: '#2563eb', color: 'white', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                           Descargar
                         </a>

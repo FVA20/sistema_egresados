@@ -308,7 +308,7 @@ export default function StudentHomePage() {
               return (
                 <div key={item.id} style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column' }}>
                   {item.image_path ? (
-                    <img src={`/uploads/${item.image_path}`} alt={item.title} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
+                    <img src={`${import.meta.env.VITE_API_URL || ''}/uploads/${item.image_path}`} alt={item.title} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
                   ) : (
                     <div style={{ height: '160px', background: 'linear-gradient(135deg, #f0fbff 0%, #cffafe 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '40px', height: '40px', color: '#a5f3fc' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -335,7 +335,7 @@ export default function StudentHomePage() {
                     )}
                     {/* Archivo adjunto */}
                     {item.file_name && item.file_path && (
-                      <a href={`/uploads/${item.file_path}`} download={item.file_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', textDecoration: 'none' }}>
+                      <a href={`${import.meta.env.VITE_API_URL || ''}/uploads/${item.file_path}`} download={item.file_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', textDecoration: 'none' }}>
                         <svg style={{ width: '14px', height: '14px', color: '#00aae4', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         <span style={{ fontSize: '12px', fontWeight: 600, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.file_name}</span>
                       </a>
