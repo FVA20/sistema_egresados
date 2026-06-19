@@ -23,8 +23,17 @@ export default function StudentLoginPage() {
       localStorage.setItem('graduate_token', data.access_token)
       localStorage.setItem('graduate_user', JSON.stringify(data.graduate))
       window.location.href = '/portal/inicio'
-    } catch {
-      setError('Credenciales incorrectas. Verifique su DNI y apellidos.')
+    } catch (err: any) {
+      const status = err.response?.status
+      if (status === 401) {
+        setError('Credenciales incorrectas. Verifique su DNI y apellidos.')
+      } else if (status === 422) {
+        setError('Error de formato en los datos enviados (422). Contacte al administrador.')
+      } else if (err.code === 'ECONNABORTED') {
+        setError('El servidor tardó demasiado. Intente de nuevo en unos segundos.')
+      } else {
+        setError(`Error inesperado (${status ?? err.code ?? 'red'}). Intente de nuevo.`)
+      }
       setLoading(false)
     }
   }
