@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import Optional, TYPE_CHECKING
 from datetime import datetime
 from app.schemas.program import ProgramResponse
@@ -8,7 +8,7 @@ class GraduateBase(BaseModel):
     first_name: str
     last_name: str
     document_number: str
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     phone: Optional[str] = None
     program_id: int
     graduation_year: int
@@ -25,7 +25,7 @@ class GraduateUpdate(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     document_number: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     phone: Optional[str] = None
     program_id: Optional[int] = None
     graduation_year: Optional[int] = None
