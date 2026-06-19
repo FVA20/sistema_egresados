@@ -18,7 +18,7 @@ class GraduateBase(BaseModel):
 
 
 class GraduateCreate(GraduateBase):
-    pass
+    email: str
 
 
 class GraduateUpdate(BaseModel):
