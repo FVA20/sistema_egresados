@@ -19,14 +19,19 @@ export default function GraduatesPage() {
 
   const load = async () => {
     setLoading(true)
-    const data = await getGraduates({
-      search: search || undefined,
-      program_id: programFilter ? Number(programFilter) : undefined,
-      limit: 500,
-    })
-    setGraduates(data)
-    setPage(1)
-    setLoading(false)
+    try {
+      const data = await getGraduates({
+        search: search || undefined,
+        program_id: programFilter ? Number(programFilter) : undefined,
+        limit: 500,
+      })
+      setGraduates(data)
+      setPage(1)
+    } catch {
+      setGraduates([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => { getPrograms().then(setPrograms) }, [])

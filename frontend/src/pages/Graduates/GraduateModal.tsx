@@ -48,7 +48,7 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
         graduation_year: Number(form.graduation_year),
         enrollment_year: form.enrollment_year ? Number(form.enrollment_year) : undefined,
       }
-      isEdit ? await updateGraduate(graduate.id, payload) : await createGraduate(payload as any)
+      isEdit ? await updateGraduate(graduate.id, payload) : await createGraduate(payload)
       onSave()
     } catch (err: any) {
       setError(err.response?.data?.detail ?? 'Error al guardar')

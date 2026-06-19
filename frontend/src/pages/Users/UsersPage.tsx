@@ -88,7 +88,7 @@ export default function UsersPage() {
     return (
       g.first_name.toLowerCase().includes(q) ||
       g.last_name.toLowerCase().includes(q) ||
-      g.email.toLowerCase().includes(q) ||
+      (g.email ?? '').toLowerCase().includes(q) ||
       g.document_number.toLowerCase().includes(q)
     )
   })
@@ -340,7 +340,7 @@ export default function UsersPage() {
                         <div style={{ marginTop: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px' }}>
                           <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Acceso al portal</p>
                           <p style={{ fontSize: '12px', color: '#475569' }}>
-                            <span style={{ fontWeight: 600 }}>Usuario:</span> {g.email} o {g.document_number}
+                            <span style={{ fontWeight: 600 }}>Usuario:</span> {g.document_number}
                           </p>
                           <p style={{ fontSize: '12px', color: '#475569', marginTop: '3px' }}>
                             <span style={{ fontWeight: 600 }}>Contraseña:</span> sus apellidos

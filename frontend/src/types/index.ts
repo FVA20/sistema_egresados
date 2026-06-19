@@ -21,7 +21,7 @@ export interface Graduate {
   first_name: string
   last_name: string
   document_number: string
-  email: string
+  email?: string | null
   phone?: string
   program_id: number
   program?: Program
