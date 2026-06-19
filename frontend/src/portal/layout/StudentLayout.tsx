@@ -126,11 +126,15 @@ export default function StudentLayout() {
         .student-hamburger { display: none; }
         .student-user-name { display: block; }
         .student-mobile-menu { display: none; }
+        .student-bottom-nav { display: none; }
+        .student-main-wrap { padding-bottom: 0; }
         @media (max-width: 768px) {
           .student-nav-links { display: none; }
           .student-hamburger { display: flex; }
           .student-user-name { display: none; }
           .student-mobile-menu { display: block; }
+          .student-bottom-nav { display: flex; }
+          .student-main-wrap { padding-bottom: 68px; }
         }
       `}</style>
 
@@ -424,9 +428,73 @@ export default function StudentLayout() {
       </nav>
 
       {/* Content */}
-      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 16px' }}>
+      <main className="student-main-wrap" style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 16px' }}>
         <Outlet />
       </main>
+
+      {/* Barra de navegación inferior — solo móvil */}
+      <nav className="student-bottom-nav" style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40,
+        background: 'white',
+        borderTop: '1px solid #e2e8f0',
+        boxShadow: '0 -4px 20px rgba(0,0,0,0.08)',
+        height: '64px',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: '0 8px',
+      }}>
+        {[
+          {
+            to: '/portal/inicio',
+            label: 'Inicio',
+            icon: (
+              <svg style={{ width: '22px', height: '22px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+            ),
+          },
+          {
+            to: '/portal/programas',
+            label: 'Programas',
+            icon: (
+              <svg style={{ width: '22px', height: '22px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            ),
+          },
+          {
+            to: '/portal/contacto',
+            label: 'Contacto',
+            icon: (
+              <svg style={{ width: '22px', height: '22px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            ),
+          },
+        ].map(item => {
+          const active = location.pathname === item.to || (item.to !== '/portal/inicio' && location.pathname.startsWith(item.to))
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: '3px', flex: 1, height: '100%', textDecoration: 'none',
+                color: active ? '#00aae4' : '#94a3b8',
+                transition: 'color 0.15s',
+              }}
+            >
+              <div style={{ position: 'relative' }}>
+                {item.icon}
+                {active && (
+                  <span style={{ position: 'absolute', top: '-6px', left: '50%', transform: 'translateX(-50%)', width: '4px', height: '4px', background: '#00aae4', borderRadius: '50%' }} />
+                )}
+              </div>
+              <span style={{ fontSize: '10px', fontWeight: active ? 700 : 500, lineHeight: 1 }}>{item.label}</span>
+            </Link>
+          )
+        })}
+      </nav>
 
       {/* Modal de Perfil */}
       {showProfile && (

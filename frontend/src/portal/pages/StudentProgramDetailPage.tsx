@@ -97,6 +97,23 @@ export default function StudentProgramDetailPage() {
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
 
+      <style>{`
+        .detail-header { padding: 40px 48px; }
+        .detail-h1 { font-size: 28px; }
+        .wp-card { padding: 28px 36px; }
+        .wp-top-row { flex-direction: row; align-items: flex-start; gap: 20px; }
+        .wp-file-row { flex-direction: row; }
+        .wp-download-btn { flex-shrink: 0; }
+        @media (max-width: 768px) {
+          .detail-header { padding: 24px 20px; }
+          .detail-h1 { font-size: 20px; }
+          .wp-card { padding: 20px; }
+          .wp-top-row { gap: 14px; }
+          .wp-file-row { flex-direction: column; gap: 10px; }
+          .wp-download-btn { width: 100%; justify-content: center; }
+        }
+      `}</style>
+
       {/* Back button */}
       <button
         onClick={() => navigate('/portal/programas')}
@@ -104,17 +121,17 @@ export default function StudentProgramDetailPage() {
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           background: 'white', border: '1px solid #e2e8f0', borderRadius: '10px',
           padding: '9px 18px', fontSize: '14px', fontWeight: 600, color: '#475569',
-          cursor: 'pointer', marginBottom: '32px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+          cursor: 'pointer', marginBottom: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
         }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '16px', height: '16px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-        Volver a Programas
+        Volver
       </button>
 
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg, #00aae4 0%, #006fa0 100%)', borderRadius: '20px', padding: '40px 48px', marginBottom: '40px' }}>
+      <div className="detail-header" style={{ background: 'linear-gradient(135deg, #00aae4 0%, #006fa0 100%)', borderRadius: '20px', marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
           <div style={{ width: '52px', height: '52px', background: 'rgba(255,255,255,0.1)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '26px', height: '26px', color: 'white' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,7 +140,7 @@ export default function StudentProgramDetailPage() {
           </div>
           <div>
             <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px' }}>Convocatorias</p>
-            <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'white', margin: 0, lineHeight: 1.2 }}>{programName || 'Cargando...'}</h1>
+            <h1 className="detail-h1" style={{ fontWeight: 900, color: 'white', margin: 0, lineHeight: 1.2 }}>{programName || 'Cargando...'}</h1>
           </div>
         </div>
       </div>
@@ -171,9 +188,10 @@ export default function StudentProgramDetailPage() {
             return (
               <div
                 key={plan.id}
-                style={{ background: 'white', border: `1px solid ${applied ? '#a7f3d0' : '#e2e8f0'}`, borderRadius: '20px', padding: '32px 40px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', transition: 'border-color 0.2s' }}
+                className="wp-card"
+                style={{ background: 'white', border: `1px solid ${applied ? '#a7f3d0' : '#e2e8f0'}`, borderRadius: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', transition: 'border-color 0.2s' }}
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+                <div className="wp-top-row" style={{ display: 'flex' }}>
                   <div style={{ width: '40px', height: '40px', background: '#f0fbff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#00aae4', fontSize: '16px', flexShrink: 0 }}>
                     {i + 1}
                   </div>
@@ -212,19 +230,22 @@ export default function StudentProgramDetailPage() {
                     {plan.file_name && plan.file_path && (() => {
                       const fi = fileIcon(plan.file_name)
                       return (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', background: fi.bg, border: `1px solid ${fi.color}22`, borderRadius: '12px', marginBottom: '16px' }}>
-                          <div style={{ width: '36px', height: '36px', background: fi.color, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: 'white', letterSpacing: '0.03em' }}>{fi.label}</span>
-                          </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <p style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{plan.file_name}</p>
-                            <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Archivo adjunto</p>
+                        <div className="wp-file-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', background: fi.bg, border: `1px solid ${fi.color}22`, borderRadius: '12px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+                            <div style={{ width: '36px', height: '36px', background: fi.color, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <span style={{ fontSize: '9px', fontWeight: 900, color: 'white', letterSpacing: '0.03em' }}>{fi.label}</span>
+                            </div>
+                            <div style={{ minWidth: 0 }}>
+                              <p style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{plan.file_name}</p>
+                              <p style={{ fontSize: '11px', color: '#94a3b8', margin: '2px 0 0' }}>Archivo adjunto</p>
+                            </div>
                           </div>
                           <a
                             href={`/uploads/${plan.file_path}`}
                             target="_blank"
                             rel="noreferrer"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: fi.color, borderRadius: '8px', fontSize: '12px', fontWeight: 700, color: 'white', textDecoration: 'none', flexShrink: 0 }}
+                            className="wp-download-btn"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: fi.color, borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: 'white', textDecoration: 'none' }}
                           >
                             <svg style={{ width: '13px', height: '13px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>

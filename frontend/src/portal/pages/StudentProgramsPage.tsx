@@ -31,10 +31,28 @@ export default function StudentProgramsPage() {
 
   return (
     <div>
+      <style>{`
+        .prog-h1 { font-size: 36px; }
+        .prog-card { padding: 48px 56px; }
+        .prog-inner { flex-direction: row; align-items: center; }
+        .prog-btn { width: auto; flex-shrink: 0; }
+        .prog-info { padding: 32px 40px; }
+        @media (max-width: 768px) {
+          .prog-h1 { font-size: 24px; }
+          .prog-card { padding: 28px 20px; }
+          .prog-inner { flex-direction: column; align-items: stretch; }
+          .prog-icon-title { gap: 16px !important; }
+          .prog-icon-title > div:first-child { width: 56px !important; height: 56px !important; }
+          .prog-name { font-size: 20px !important; }
+          .prog-btn { width: 100%; justify-content: center; }
+          .prog-info { padding: 20px; }
+        }
+      `}</style>
+
       {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '36px', fontWeight: 900, color: '#0f172a', margin: '0 0 10px' }}>Programa de Estudio</h1>
-        <p style={{ fontSize: '16px', color: '#94a3b8', margin: 0 }}>Accede a las convocatorias de tu carrera</p>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 className="prog-h1" style={{ fontWeight: 900, color: '#0f172a', margin: '0 0 8px' }}>Programa de Estudio</h1>
+        <p style={{ fontSize: '15px', color: '#94a3b8', margin: 0 }}>Accede a las convocatorias de tu carrera</p>
       </div>
 
       {loading && (
@@ -60,17 +78,16 @@ export default function StudentProgramsPage() {
       {!loading && !error && program && (
         <div>
           {/* Card del programa */}
-          <div style={{
+          <div className="prog-card" style={{
             background: 'linear-gradient(135deg, #00aae4, #006fa0)',
             borderRadius: '24px',
-            padding: '48px 56px',
             marginBottom: '32px',
             position: 'relative',
             overflow: 'hidden',
           }}>
             <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '220px', height: '220px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%', pointerEvents: 'none' }} />
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px', flexWrap: 'wrap' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <div className="prog-inner" style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', gap: '24px' }}>
+              <div className="prog-icon-title" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                 <div style={{ width: '72px', height: '72px', background: 'rgba(255,255,255,0.18)', border: '2px solid rgba(255,255,255,0.25)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '36px', height: '36px', color: 'white' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -78,27 +95,28 @@ export default function StudentProgramsPage() {
                 </div>
                 <div>
                   <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 8px' }}>Tu carrera técnica</p>
-                  <h2 style={{ fontSize: '28px', fontWeight: 900, color: 'white', margin: '0 0 12px', lineHeight: 1.2 }}>{program.name}</h2>
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '5px 14px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
+                  <h2 className="prog-name" style={{ fontSize: '28px', fontWeight: 900, color: 'white', margin: '0 0 12px', lineHeight: 1.2 }}>{program.name}</h2>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '4px 12px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
                       {program.degree_level}
                     </span>
-                    <span style={{ fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '5px 14px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '4px 12px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
                       {program.duration_years} año{program.duration_years !== 1 ? 's' : ''}
                     </span>
-                    <span style={{ fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '5px 14px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(255,255,255,0.18)', color: 'white', padding: '4px 12px', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.25)' }}>
                       {program.faculty}
                     </span>
                   </div>
                 </div>
               </div>
               <button
+                className="prog-btn"
                 onClick={() => navigate(`/portal/programas/${program.id}`)}
                 style={{
                   background: 'white',
                   color: '#00aae4',
                   fontWeight: 800,
-                  padding: '16px 36px',
+                  padding: '14px 28px',
                   borderRadius: '14px',
                   fontSize: '15px',
                   border: 'none',
@@ -106,8 +124,8 @@ export default function StudentProgramsPage() {
                   boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '10px',
-                  flexShrink: 0,
                   transition: 'transform 0.15s, box-shadow 0.15s',
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)' }}
@@ -122,7 +140,7 @@ export default function StudentProgramsPage() {
           </div>
 
           {/* Info adicional */}
-          <div style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '32px 40px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+          <div className="prog-info" style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
               <svg style={{ width: '20px', height: '20px', color: '#00aae4', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
