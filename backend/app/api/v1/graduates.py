@@ -53,11 +53,13 @@ def create_graduate(
     db: Session = Depends(get_db),
     _=Depends(require_admin),
 ):
-    existing = db.query(Graduate).filter(
-        (Graduate.email == data.email) | (Graduate.document_number == data.document_number)
-    ).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Ya existe un egresado con ese email o documento")
+    existing_doc = db.query(Graduate).filter(Graduate.document_number == data.document_number).first()
+    if existing_doc:
+        raise HTTPException(status_code=400, detail="Ya existe un egresado con ese número de documento")
+    if data.email:
+        existing_email = db.query(Graduate).filter(Graduate.email == data.email).first()
+        if existing_email:
+            raise HTTPException(status_code=400, detail="Ya existe un egresado con ese correo electrónico")
     graduate = Graduate(**data.model_dump())
     db.add(graduate)
     db.commit()
