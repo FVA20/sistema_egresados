@@ -51,7 +51,8 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
       isEdit ? await updateGraduate(graduate.id, payload) : await createGraduate(payload)
       onSave()
     } catch (err: any) {
-      setError(err.response?.data?.detail ?? 'Error al guardar')
+      const detail = err.response?.data?.detail
+      setError(Array.isArray(detail) ? 'Error al guardar. Verifica los datos ingresados.' : (detail ?? 'Error al guardar. El servidor puede estar iniciando, intenta de nuevo.'))
     } finally { setLoading(false) }
   }
 
@@ -102,7 +103,7 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
             </div>
             <div>
               <label style={labelStyle}>Correo Electrónico <span style={{ fontWeight: 500, color: '#94a3b8', textTransform: 'none', letterSpacing: 0, fontSize: '11px' }}>(opcional)</span></label>
-              <input name="email" type="email" value={form.email} onChange={set} placeholder="correo@ejemplo.com" style={inputStyle} />
+              <input name="email" type="text" value={form.email} onChange={set} placeholder="correo@ejemplo.com" style={inputStyle} />
             </div>
           </div>
 
