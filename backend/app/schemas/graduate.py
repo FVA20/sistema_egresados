@@ -8,7 +8,7 @@ class GraduateBase(BaseModel):
     first_name: str
     last_name: str
     document_number: str
-    email: EmailStr
+    email: Optional[EmailStr] = None
     phone: Optional[str] = None
     program_id: int
     graduation_year: int

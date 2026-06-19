@@ -11,7 +11,7 @@ class Graduate(Base):
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     document_number = Column(String(20), unique=True, nullable=False)
-    email = Column(String(150), unique=True, nullable=False, index=True)
+    email = Column(String(150), unique=True, nullable=True, index=True)
     phone = Column(String(20), nullable=True)
     program_id = Column(Integer, ForeignKey("programs.id"), nullable=False)
     graduation_year = Column(Integer, nullable=False)

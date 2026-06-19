@@ -43,6 +43,7 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
     try {
       const payload = {
         ...form,
+        email:           form.email.trim() || null,
         program_id:      Number(form.program_id),
         graduation_year: Number(form.graduation_year),
         enrollment_year: form.enrollment_year ? Number(form.enrollment_year) : undefined,
@@ -100,8 +101,8 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
               <input name="document_number" value={form.document_number} onChange={set} required placeholder="Ej: 74512369" style={inputStyle} />
             </div>
             <div>
-              <label style={labelStyle}>Correo Electrónico</label>
-              <input name="email" type="email" value={form.email} onChange={set} required placeholder="correo@ejemplo.com" style={inputStyle} />
+              <label style={labelStyle}>Correo Electrónico <span style={{ fontWeight: 400, color: '#cbd5e1' }}>(opcional)</span></label>
+              <input name="email" type="email" value={form.email} onChange={set} placeholder="correo@ejemplo.com" style={inputStyle} />
             </div>
           </div>
 
