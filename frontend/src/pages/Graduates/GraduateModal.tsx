@@ -43,7 +43,7 @@ export default function GraduateModal({ graduate, programs, onClose, onSave }: P
     try {
       const payload = {
         ...form,
-        email:           form.email.trim() || null,
+        email:           form.email.trim() || undefined,
         program_id:      Number(form.program_id),
         graduation_year: Number(form.graduation_year),
         enrollment_year: form.enrollment_year ? Number(form.enrollment_year) : undefined,
